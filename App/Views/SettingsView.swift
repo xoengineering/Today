@@ -19,10 +19,15 @@ struct SettingsView: View {
 }
 
 extension View {
-  /// A grouped form that fits its content with no scrolling, which is what every settings pane is.
+  /// A grouped form, which is what every settings pane is.
+  ///
+  /// On macOS the window hugs the form, so the form neither scrolls nor stretches. On iOS a form sized that way
+  /// comes out empty, and the sheet scrolls like any other.
   func settingsForm() -> some View {
     formStyle(.grouped)
-      .scrollDisabled(true)
-      .fixedSize(horizontal: false, vertical: true)
+      #if os(macOS)
+        .scrollDisabled(true)
+        .fixedSize(horizontal: false, vertical: true)
+      #endif
   }
 }
