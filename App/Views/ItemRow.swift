@@ -67,24 +67,40 @@ struct ItemRow: View {
       Button("Delete", systemImage: "xmark", role: .destructive) { store.delete(item) }
     }
     // Swipe actions are icon only. The titles still name them for accessibility.
+    // Backward moves are on the leading edge, forward moves on the trailing edge. The first button sits at the edge.
     .swipeActions(edge: .leading, allowsFullSwipe: true) {
       moveButton
         .tint(.accentColor)
+        .labelStyle(.iconOnly)
+      stateButtons(for: statesBefore)
         .labelStyle(.iconOnly)
     }
     .swipeActions(edge: .trailing) {
       Button("Delete", systemImage: "xmark", role: .destructive) { store.delete(item) }
         .labelStyle(.iconOnly)
-      stateButtons
+      stateButtons(for: statesAfter.reversed())
         .labelStyle(.iconOnly)
     }
   }
 
+  private var statesBefore: [CheckState] {
+    Array(CheckState.allCases.prefix { $0 != item.checkState })
+  }
+
+  private var statesAfter: [CheckState] {
+    Array(CheckState.allCases.drop { $0 != item.checkState }.dropFirst())
+  }
+
   /// The two states the item is not in.
   @ViewBuilder private var stateButtons: some View {
-    ForEach(CheckState.allCases.filter { $0 != item.checkState }, id: \.self) { state in
+    stateButtons(for: statesBefore + statesAfter)
+  }
+
+  @ViewBuilder private func stateButtons(for states: [CheckState]) -> some View {
+    ForEach(states, id: \.self) { state in
       // Swipe actions fill their symbols, which turns the empty circle into a disc. The dashed circle has
-      // no filled form to fall into, and reads as not started.
+      // no filled form to fall into, and reads as not started. They also ignore transforms on the icon,
+      // so the half-filled one stays upright here.
       let symbol = state == .todo ? "circle.dashed" : state.symbol
       Button("Mark as \(state.label)", systemImage: symbol) { store.set(item, to: state) }
     }
