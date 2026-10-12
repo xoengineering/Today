@@ -30,6 +30,8 @@ struct RingsView: View {
       }
       .padding()
       .frame(maxWidth: 480)
+      // The scroll content spans the window, so the title bar does too. Only the grid is capped.
+      .frame(maxWidth: .infinity)
     }
     .navigationTitle("Rings")
     .task(id: store.reloadCount) {

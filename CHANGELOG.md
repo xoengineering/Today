@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- The Rings title bar spans the whole window, like the other screens, instead of only the grid's width.
 - Add `script/index`, which hands Xcode's build settings to sourcekit-lsp through xcode-build-server so editors other than Xcode resolve `TodayKit`, `Testing`, and `PackageDescription`. The `Today` scheme now tests the package.
 - The empty Today and Backlog states drop their trailing periods.
 - Settings on macOS fits its content with no scrolling, no longer hands keyboard focus to the end-of-day stepper on open, and explains each section in one line.
