@@ -24,15 +24,25 @@ struct ItemRow: View {
         }
       }
       if isEditing {
-        TextField("Title", text: $title)
-          .scaledFont(.body)
-          .textFieldStyle(.plain)
-          .focused($isFieldFocused)
-          .onSubmit(commit)
-          .onChange(of: isFieldFocused) { _, focused in
-            if !focused { commit() }
-          }
-          .onAppear { isFieldFocused = true }
+        // A field in a table row never reports a wrapped height. The invisible text behind it does,
+        // so the row grows with what is typed and the field fills the room.
+        ZStack(alignment: .topLeading) {
+          Text(title.isEmpty ? " " : title)
+            .scaledFont(.body)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .opacity(0)
+            .accessibilityHidden(true)
+          TextField("Title", text: $title, axis: .vertical)
+            .scaledFont(.body)
+            .textFieldStyle(.plain)
+            .focused($isFieldFocused)
+            .onSubmit(commit)
+            .onChange(of: isFieldFocused) { _, focused in
+              if !focused { commit() }
+            }
+            .onAppear { isFieldFocused = true }
+        }
       } else {
         Text(item.title)
           .scaledFont(.body)

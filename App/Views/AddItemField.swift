@@ -10,7 +10,7 @@ struct AddItemField: View {
   @FocusState private var isFocused: Bool
 
   var body: some View {
-    HStack(spacing: 12) {
+    HStack(alignment: .top, spacing: 12) {
       Button {
         isFocused = true
       } label: {
@@ -20,11 +20,21 @@ struct AddItemField: View {
       }
       .buttonStyle(.plain)
       .accessibilityLabel(prompt)
-      TextField(prompt, text: $title)
-        .scaledFont(.body)
-        .textFieldStyle(.plain)
-        .focused($isFocused)
-        .onSubmit(add)
+      // A field in a table row never reports a wrapped height. The invisible text behind it does,
+      // so the row grows with what is typed and the field fills the room.
+      ZStack(alignment: .topLeading) {
+        Text(title.isEmpty ? prompt : title)
+          .scaledFont(.body)
+          .fixedSize(horizontal: false, vertical: true)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .opacity(0)
+          .accessibilityHidden(true)
+        TextField(prompt, text: $title, axis: .vertical)
+          .scaledFont(.body)
+          .textFieldStyle(.plain)
+          .focused($isFocused)
+          .onSubmit(add)
+      }
     }
     .padding(.vertical, 4)
     .listRowSeparator(.hidden)
