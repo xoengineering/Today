@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Swipe actions show icons only, with an X for Delete.
 - The add row and a title being edited grow with their text instead of scrolling sideways.
 - Settings has General and Appearance tabs. Text size gains a sixth step, Giant.
 - Add a typeface setting: Sans, Rounded, Serif, or Mono, picked from four tiles that each show their own face.

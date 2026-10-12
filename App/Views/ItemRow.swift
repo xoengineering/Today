@@ -63,13 +63,17 @@ struct ItemRow: View {
     .contextMenu {
       moveButton
       Divider()
-      Button("Delete", role: .destructive) { store.delete(item) }
+      Button("Delete", systemImage: "xmark", role: .destructive) { store.delete(item) }
     }
+    // Swipe actions are icon only. The titles still name them for accessibility.
     .swipeActions(edge: .leading, allowsFullSwipe: true) {
-      moveButton.tint(.accentColor)
+      moveButton
+        .tint(.accentColor)
+        .labelStyle(.iconOnly)
     }
     .swipeActions(edge: .trailing) {
-      Button("Delete", role: .destructive) { store.delete(item) }
+      Button("Delete", systemImage: "xmark", role: .destructive) { store.delete(item) }
+        .labelStyle(.iconOnly)
     }
   }
 
