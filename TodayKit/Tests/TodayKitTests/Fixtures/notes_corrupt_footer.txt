@@ -1,0 +1,2 @@
+A note whose footer someone mangled by hand.
+today:{"days":["2026-10-11"],"order":
