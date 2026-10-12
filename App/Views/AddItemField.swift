@@ -10,7 +10,7 @@ struct AddItemField: View {
   @FocusState private var isFocused: Bool
 
   var body: some View {
-    HStack(alignment: .top, spacing: 12) {
+    HStack(alignment: .top, spacing: 8) {
       Button {
         isFocused = true
       } label: {
@@ -36,7 +36,7 @@ struct AddItemField: View {
           .onSubmit(add)
       }
     }
-    .padding(.vertical, 4)
+    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
     .listRowSeparator(.hidden)
     .onChange(of: navigation.addItemRequest) {
       isFocused = true

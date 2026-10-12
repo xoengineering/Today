@@ -17,7 +17,7 @@ struct ItemRow: View {
   }
 
   var body: some View {
-    HStack(alignment: .top, spacing: 12) {
+    HStack(alignment: .top, spacing: 8) {
       CheckCircle(
         state: item.checkState,
         advance: { store.set(item, to: item.checkState.next) },
@@ -53,7 +53,8 @@ struct ItemRow: View {
           .onTapGesture { isEditing = true }
       }
     }
-    .padding(.vertical, 4)
+    // 8 between rows, the same as between the circle and the text. The list's own inset is replaced, not added to.
+    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
     // The separator would run under the baseline, through the circle's bottom and every descender.
     .listRowSeparator(.hidden)
     .onChange(of: item.title) { _, newTitle in

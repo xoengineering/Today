@@ -10,7 +10,7 @@ struct RingRow: View {
   let relation: String?
 
   var body: some View {
-    HStack(spacing: 12) {
+    HStack(spacing: 8) {
       RingView(ring: ring)
         .frame(width: 28 * store.settings.textSize.ringScale, height: 28 * store.settings.textSize.ringScale)
       ViewThatFits(in: .horizontal) {
@@ -27,7 +27,7 @@ struct RingRow: View {
       }
     }
     .scaledFont(.body)
-    .padding(.vertical, 4)
+    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
   }
 
   /// One string, so the relation wraps along with the date instead of standing beside it.

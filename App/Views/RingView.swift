@@ -7,14 +7,16 @@ struct RingView: View {
   var lineWidth: CGFloat = 4
 
   var body: some View {
+    // The stroke is drawn inside the frame, so the ring's outer edge is the frame's edge and lines up with text.
+    let path = Circle().inset(by: lineWidth / 2)
     ZStack {
-      Circle()
+      path
         .stroke(.quaternary, lineWidth: lineWidth)
       if ring.total > 0 {
-        Circle()
+        path
           .trim(from: 0, to: ring.completedFraction)
           .stroke(.green, style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt))
-        Circle()
+        path
           .trim(from: ring.completedFraction, to: 1)
           .stroke(.red, style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt))
       }

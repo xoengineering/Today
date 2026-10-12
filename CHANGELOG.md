@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Rows use the same 8 points between the circle and the text as between one row and the next, and day rings draw their stroke inside their box so they line up with the item circles.
 - Day rings grow with the text size more gently than the text itself.
 - Every menu and context menu item carries a symbol.
 - Swipe actions are split by direction: Move and earlier states on the leading edge, later states and Delete on the trailing edge.
