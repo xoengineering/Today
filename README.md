@@ -23,7 +23,17 @@ For macOS, iOS, and iPadOS. It is a view on top of Apple Reminders. Your reminde
 - `script/build [macos|ios]` builds the app.
 - `script/lint` and `script/format` run swift format and SwiftLint.
 - `script/run` builds and launches the macOS app.
-- `script/run ios` builds, installs, and launches in the iOS Simulator. Takes an optional simulator name: `script/run ios "iPad Pro 11-inch (M5)"`. Only iOS 27 simulators are eligible.
+- `script/run ios` builds, installs, and launches in the iOS Simulator. Takes an optional simulator name: `script/run ios "iPad Pro 11-inch (M5)"`. Only iOS 27 simulators are eligible. Grant the simulator app Reminders access without the prompt with `xcrun simctl privacy booted grant reminders engineering.xo.Today`.
+
+## How it works
+
+Today owns no data. Two lists in Reminders, Today and Backlog, are the buckets. Moving an item between buckets moves the reminder between lists. Done is a real Reminders completion. Everything else Today knows about an item lives in one line at the end of the reminder's notes:
+
+```txt
+today:{"days":["2026-10-11"],"order":3,"state":"doing","v":1}
+```
+
+`order` is the position in the Today list, `state` is `todo` or `doing`, and `days` is every day the item sat on the Today list, which is what the rings are drawn from. The text above that line is yours and is never touched.
 
 To run on a physical iPhone or iPad, open `Today.xcodeproj` in Xcode, pick the device as the destination, and Run. The device needs Developer Mode enabled and `DEVELOPMENT_TEAM` set in `Local.xcconfig`.
 

@@ -2,7 +2,7 @@
 # script/run: build and launch the app.
 #
 #   script/run              macOS
-#   script/run ios          iOS Simulator (first booted one, else iPhone 17 Pro)
+#   script/run ios          iOS Simulator (iPhone 17 unless named)
 #   script/run ios "iPad Pro 11-inch (M5)"   a named simulator
 #
 # Physical devices need signing, so run those from Xcode (see README).
@@ -25,7 +25,7 @@ case "${1:-macos}" in
     script/generate
 
     # The deployment target is 27.0, so older runtimes can't run the app.
-    WANTED="${2:-iPhone 17 Pro}"
+    WANTED="${2:-iPhone 17}"
     UDID=$(xcrun simctl list devices available -j |
       ruby -rjson -e '
         wanted = ARGV[0]
@@ -53,7 +53,8 @@ case "${1:-macos}" in
     fi
 
     xcrun simctl boot "$UDID" 2>/dev/null || true
-    open -a Simulator
+    # The simulator runs headless without its window. Show the window when the app is around to show it.
+    open -a Simulator 2>/dev/null || true
 
     xcodebuild -project Today.xcodeproj -scheme Today \
       -destination "id=$UDID" CODE_SIGNING_ALLOWED=NO build
