@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- On macOS the app keeps running with its window closed. ⌘0 or Window, Today brings the window back, and ⌘N brings it back on Today with the cursor in the add field, from anywhere.
 - Lists re-measure their rows whenever rows are added or removed, so items arriving from another device land at full height on macOS. The add field keeps focus across that rebuild.
 - Each device rolls the Today list over once per logical day, on its first load of that day, instead of on every sync. Two devices with different reset times no longer return each other's fresh items to the Backlog.
 - Sidebar symbols take the text color, and the empty-state art is gray.

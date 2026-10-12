@@ -8,7 +8,10 @@ final class NavigationState {
   /// Bumped by the New Item command, so the visible add row focuses itself.
   var addItemRequest = 0
 
+  /// Goes to Today and asks its add field for focus, whether the field is on screen already or about to appear.
   func requestAddItem() {
+    screen = .today
+    addFieldHoldsFocus = true
     addItemRequest += 1
   }
 

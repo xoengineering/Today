@@ -9,7 +9,7 @@ struct TodayCommands: Commands {
 
   var body: some Commands {
     CommandGroup(replacing: .newItem) {
-      Button("New Item", systemImage: "plus") { navigation.requestAddItem() }
+      NewItemButton(navigation: navigation)
         .keyboardShortcut("n")
         .labelStyle(.titleAndIcon)
     }
@@ -32,6 +32,35 @@ struct TodayCommands: Commands {
           .labelStyle(.titleAndIcon)
       }
     }
+    CommandGroup(after: .windowArrangement) {
+      ShowWindowButton()
+        .keyboardShortcut("0")
+        .labelStyle(.titleAndIcon)
+    }
     SidebarCommands()
+  }
+}
+
+/// Shows the window, which may have been closed, goes to Today, and puts the cursor in the add field.
+private struct NewItemButton: View {
+  @Environment(\.openWindow) private var openWindow
+  let navigation: NavigationState
+
+  var body: some View {
+    Button("New Item", systemImage: "plus") {
+      openWindow(id: "main")
+      navigation.requestAddItem()
+    }
+  }
+}
+
+/// Brings the one window back after it has been closed.
+private struct ShowWindowButton: View {
+  @Environment(\.openWindow) private var openWindow
+
+  var body: some View {
+    Button("Today", systemImage: "macwindow") {
+      openWindow(id: "main")
+    }
   }
 }
