@@ -27,9 +27,22 @@ public struct DayRing: Hashable, Sendable {
     return .someDone
   }
 
-  /// The share of the ring that is green, 0 through 1.
+  /// The share finished, 0 through 1.
   public var completedFraction: Double {
     total == 0 ? 0 : Double(completed) / Double(total)
+  }
+
+  /// The system symbol that stands for the day.
+  ///
+  /// Dotted for nothing planned, dashed for nothing done, a checked disc for everything done. In between it is the
+  /// plain circle, whose variable value draws the share finished as an arc.
+  public var symbol: String {
+    switch outcome {
+    case .empty: "circle.dotted"
+    case .noneDone: "circle.dashed"
+    case .someDone: "circle"
+    case .allDone: "checkmark.circle.fill"
+    }
   }
 
   /// Counts the items that were on the Today list on a day, and how many were finished within that day.

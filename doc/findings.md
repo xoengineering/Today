@@ -14,6 +14,11 @@ Platform quirks, SDK gotchas, and tool behaviors met while building Today. Each 
 - Xcode 27.0 on this machine has no `Simulator.app` anywhere under `Xcode.app`, so `open -a Simulator` fails. `simctl` still boots devices, installs, launches, grants privacy (`xcrun simctl privacy <udid> grant reminders engineering.xo.Today`), and takes screenshots (`xcrun simctl io <udid> screenshot out.png`) headless. `script/run ios` treats the window as optional.
 - The iOS 27.0 runtime ships `iPhone 17`, `iPhone 17e`, `iPhone Air`, and `iPhone 18 Pro` devices. There is no `iPhone 17 Pro` in it.
 
+## SF Symbols
+
+- `Image(systemName: "circle", variableValue:)` changes nothing in the default or `.color` variable modes. Only `.symbolVariableValueMode(.draw)` responds, drawing the value's share as an arc from twelve o'clock. The remainder is not removed, it is the same color at low opacity, in monochrome, palette, and hierarchical alike. A palette's second color never reaches the remainder, so a two-color ring (done in green, left in red) cannot come from the symbol. Rendered and compared with `ImageRenderer` on macOS 27.
+- Menus and swipe actions apply the `.fill` variant to their symbols on their own, and `.symbolVariant(.none)` does not undo it there. Swipe actions also ignore transforms on the icon view. A symbol with no filled form, such as `circle.dashed`, is the way to keep an outline.
+
 ## Swift concurrency
 
 - A closure passed to `EKEventStore.fetchReminders(matching:completion:)` from inside a `@MainActor` method is inferred to be main-actor isolated, and EventKit invokes it on a private dispatch queue. Under Swift 6 the runtime asserts the isolation on entry and the app dies with `EXC_BREAKPOINT` in `_dispatch_assert_queue_fail`. Mark the closure `@Sendable` so it is non-isolated, map the reminders to `Sendable` values inside it, and resume a continuation with those.

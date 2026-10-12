@@ -4,6 +4,8 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Rings rows are laid out like item rows, with a symbol for the day in place of the drawn ring: gray dotted for nothing planned, red dashed for nothing done, a green arc for the share done, and a green checked disc for everything done.
+- Launching with `-fakeRings` shows one synthetic day per tenth on the Rings screen, for looking at the symbols.
 - Titles stay in the title bar on iOS, and lists are plain rows on the background rather than cards. Rings rows have no separators.
 - Settings panes show their content on iOS.
 - Rows use each platform's own list insets. Only the 8 points between a circle and its text is set by the app.

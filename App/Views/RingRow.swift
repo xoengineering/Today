@@ -1,40 +1,49 @@
 import SwiftUI
 import TodayKit
 
-/// One day on the Rings screen: the ring, the date, and "Today" or "Yesterday" when it applies.
+/// One day on the Rings screen, laid out like an item row: the day's symbol, then the date.
 ///
-/// The finished count is shown only while everything fits on one line. The date never wraps for its sake.
+/// "(Today)" and "(Yesterday)" are part of the date string, so they wrap with it.
 struct RingRow: View {
   @Environment(RemindersStore.self) private var store
   let ring: DayRing
   let relation: String?
 
   var body: some View {
-    HStack(spacing: 8) {
-      RingView(ring: ring)
-        .frame(width: 28 * store.settings.textSize.ringScale, height: 28 * store.settings.textSize.ringScale)
+    HStack(alignment: .top, spacing: 8) {
+      // A part-done day is the plain circle in draw mode: the finished share as a bright arc, the rest dimmed.
+      // The circle only honors its variable value in draw mode, and no mode gives the rest a second color.
+      Image(systemName: ring.symbol, variableValue: ring.completedFraction)
+        .symbolVariableValueMode(.draw)
+        .scaledFont(.title3)
+        .foregroundStyle(color)
+        .accessibilityLabel("\(ring.completed) of \(ring.total) done")
+      // The finished count is shown only while everything fits on one line. The date never wraps for its sake.
       ViewThatFits(in: .horizontal) {
-        HStack(spacing: 12) {
-          labels.fixedSize()
-          Spacer(minLength: 12)
+        HStack(spacing: 8) {
+          label.fixedSize()
+          Spacer(minLength: 8)
           count
         }
-        HStack(spacing: 12) {
-          labels.fixedSize()
+        HStack(spacing: 8) {
+          label.fixedSize()
           Spacer(minLength: 0)
         }
-        labels
+        label
+          .fixedSize(horizontal: false, vertical: true)
+          .frame(maxWidth: .infinity, alignment: .leading)
       }
+      .scaledFont(.body)
     }
-    .scaledFont(.body)
     .listRowSeparator(.hidden)
   }
 
-  /// One string, so the relation wraps along with the date instead of standing beside it.
-  private var labels: Text {
-    let date = Text(store.settings.dateFormat.format(ring.day))
-    guard let relation else { return date }
-    return date + Text(" (\(relation))").foregroundStyle(.secondary)
+  private var color: Color {
+    switch ring.outcome {
+    case .empty: .secondary
+    case .noneDone: .red
+    case .someDone, .allDone: .green
+    }
   }
 
   @ViewBuilder private var count: some View {
@@ -43,5 +52,11 @@ struct RingRow: View {
         .foregroundStyle(.secondary)
         .monospacedDigit()
     }
+  }
+
+  private var label: Text {
+    let date = Text(store.settings.dateFormat.format(ring.day))
+    guard let relation else { return date }
+    return date + Text(" (\(relation))").foregroundStyle(.secondary)
   }
 }

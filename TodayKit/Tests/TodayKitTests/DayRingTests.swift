@@ -52,6 +52,17 @@ import TodayKit
     #expect(ring.outcome == .allDone)
   }
 
+  @Test func symbolFollowsTheShareFinished() {
+    func symbol(_ completed: Int, of total: Int) -> String {
+      DayRing(day: day, completed: completed, total: total).symbol
+    }
+    #expect(symbol(0, of: 0) == "circle.dotted")
+    #expect(symbol(0, of: 3) == "circle.dashed")
+    #expect(symbol(1, of: 3) == "circle")
+    #expect(symbol(3, of: 4) == "circle")
+    #expect(symbol(3, of: 3) == "checkmark.circle.fill")
+  }
+
   @Test func rangeProducesOneRingPerDayOldestFirst() {
     let first = day.advanced(by: -2, calendar: calendar)
     let rings = DayRing.computeRange(from: first, through: day, items: [], endOfDay: endOfDay, calendar: calendar)

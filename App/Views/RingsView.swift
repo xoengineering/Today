@@ -15,6 +15,15 @@ struct RingsView: View {
     .toolbarTitleDisplayMode(.inline)
     .task(id: store.reloadCount) {
       let today = store.today
+      // Launched with -fakeRings, the screen shows one day per tenth, for looking at the symbols. Nothing is stored.
+      if CommandLine.arguments.contains("-fakeRings") {
+        rings = (0...11).map { offset in
+          let day = today.advanced(by: -offset)
+          return offset == 11
+            ? DayRing(day: day, completed: 0, total: 0) : DayRing(day: day, completed: 10 - offset, total: 10)
+        }
+        return
+      }
       let history = await store.fetchHistory()
       // The last row is the first day anything was ever on the Today list. Before that there is nothing to say.
       let first = history.compactMap { $0.metadata?.days.first }.min() ?? today
