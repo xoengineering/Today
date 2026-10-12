@@ -167,17 +167,7 @@ Spikes are throwaway branches. Anything worth keeping is pasted into `doc/findin
 
 ## 8. Milestones (each a stack of small commits)
 
-1. **Scaffold**: XcodeGen project, app and widget targets build empty on both platforms, scripts, SwiftLint and swift-format config, CHANGELOG, README, license.
-2. **TodayKit**: metadata Codable and footer parser, `LogicalDay`, ring math. Test first.
-3. **RemindersStore**: authorization, list resolution and creation, fetch Today and Backlog, observe changes.
-4. **Today list UI**: trinary circle control, reorder (drag on both platforms), move to and from Backlog, add item.
-5. **Backlog UI**: flat list, move to Today, add item, complete.
-6. **End-of-day reset and settings**: end-of-day hour, list pickers.
-7. **Inbox zero moments**: Today-empty and Backlog-empty states designed, not accidental.
-8. **Rings**: history view.
-9. **Widgets**: Today list widget (small, medium, large), macOS and iOS.
-10. **Mac polish**: menu bar commands, keyboard shortcuts, Settings window, window restoration.
-11. **App Store**: privacy manifest, usage-description strings, screenshots.
+1. **App Store**: privacy manifest, usage-description strings, screenshots.
 
 ## Open
 
@@ -185,11 +175,3 @@ Spikes are throwaway branches. Anything worth keeping is pasted into `doc/findin
 - Version 1.1, after 1.0 is through review: a "Show in Reminders" context menu item opening `x-apple-reminderkit://REMCDReminder/<calendarItemIdentifier>`. The scheme is what Notes and Shortcuts use but is undocumented, so nothing else may depend on it.
 - A custom SF Symbol for the in-progress circle, split from bottom left to top right, drawn like the app icon's mark. SF Symbols has no diagonal split, the row uses `circle.lefthalf.filled` turned 45°, and swipe actions ignore the turn.
 - The add row is the last row of each list, so a list taller than the window hides it below the fold. ⌘N focuses it. Options on the table: pin it under the list as a compose bar, add a `+` toolbar button that scrolls to it, or switch between the two by list length.
-
-## Decisions
-
-- Notes.app is not a data store. It has no public API. Reminders only.
-- Sort order lives in the `notes` footer.
-- Tags are unreachable via EventKit. "In progress" lives in the same `notes` footer unless the hashtag spike (§7.1) says otherwise.
-- Bundle identifier prefix `engineering.xo`. App group `group.engineering.xo.Today`.
-- MIT license.
