@@ -51,6 +51,14 @@ struct AddItemField: View {
     .onChange(of: navigation.dismissFocusRequest) {
       isFocused = false
     }
+    // The list is rebuilt whenever its rows change, which includes right after an add. The field remembers that it
+    // held focus, so the rebuilt one takes it back and typing can continue.
+    .onChange(of: isFocused) { _, focused in
+      if focused { navigation.addFieldHoldsFocus = true }
+    }
+    .onAppear {
+      if navigation.addFieldHoldsFocus { isFocused = true }
+    }
   }
 
   private var prompt: String {
@@ -63,6 +71,7 @@ struct AddItemField: View {
     guard !trimmed.isEmpty else {
       title = ""
       isFocused = false
+      navigation.addFieldHoldsFocus = false
       return
     }
     store.add(title: trimmed, to: bucket)

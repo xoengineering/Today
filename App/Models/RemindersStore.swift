@@ -53,9 +53,20 @@ final class RemindersStore {
 
   var allItems: [TodayItem] { todayItems + backlogItems }
 
-  /// Changes when a list's rows must be measured again: text settings, and the first load after launch.
-  var listIdentity: String {
-    "\(settings.textSize.rawValue)-\(settings.fontTheme.rawValue)-\(reloadCount == 0 ? "empty" : "loaded")"
+  /// Changes when the Today list's rows must be measured again: text settings, and which rows there are.
+  ///
+  /// macOS tables keep guessed heights for rows inserted into a live table. A new identity rebuilds the table, so
+  /// every row is measured with its real content. Changes within the same rows, such as a circle's state, keep it.
+  var todayListIdentity: String {
+    listIdentity(for: todayItems)
+  }
+
+  var backlogListIdentity: String {
+    listIdentity(for: backlogItems)
+  }
+
+  private func listIdentity(for items: [TodayItem]) -> String {
+    "\(settings.textSize.rawValue)-\(settings.fontTheme.rawValue)-\(items.map(\.id).joined(separator: ","))"
   }
 
   // MARK: Lifecycle

@@ -13,7 +13,7 @@ struct BacklogListView: View {
       }
       AddItemField(bucket: .backlog)
     }
-    .id(store.listIdentity)
+    .id(store.backlogListIdentity)
     .overlay {
       if store.backlogItems.isEmpty {
         EmptyBucketView(bucket: .backlog)

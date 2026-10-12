@@ -17,5 +17,9 @@ final class NavigationState {
 
   func requestDismissFocus() {
     dismissFocusRequest += 1
+    addFieldHoldsFocus = false
   }
+
+  /// Whether the add field had focus when its list was last rebuilt, so the rebuilt field takes it back.
+  var addFieldHoldsFocus = false
 }

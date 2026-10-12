@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Lists re-measure their rows whenever rows are added or removed, so items arriving from another device land at full height on macOS. The add field keeps focus across that rebuild.
 - Each device rolls the Today list over once per logical day, on its first load of that day, instead of on every sync. Two devices with different reset times no longer return each other's fresh items to the Backlog.
 - Sidebar symbols take the text color, and the empty-state art is gray.
 - A tap on a list's empty area, Return on an empty add field, or a scroll drops field focus, which on iOS dismisses the keyboard.
