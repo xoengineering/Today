@@ -179,6 +179,10 @@ Spikes are throwaway branches. Anything worth keeping is pasted into `doc/findin
 10. **Mac polish**: menu bar commands, keyboard shortcuts, Settings window, window restoration.
 11. **App Store**: privacy manifest, usage-description strings, screenshots.
 
+## Open
+
+- The add row is the last row of each list, so a list taller than the window hides it below the fold. ⌘N focuses it. Options on the table: pin it under the list as a compose bar, add a `+` toolbar button that scrolls to it, or switch between the two by list length.
+
 ## Decisions
 
 - Notes.app is not a data store. It has no public API. Reminders only.
