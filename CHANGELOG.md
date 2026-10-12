@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- The in-progress circle is split from bottom left to top right, and the three states crossfade with the half-filled one swinging into place on a small spring.
 - Swipe actions show icons only, with an X for Delete.
 - The add row and a title being edited grow with their text instead of scrolling sideways.
 - Settings has General and Appearance tabs. Text size gains a sixth step, Giant.
