@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Settings has General and Appearance tabs. Text size gains a sixth step, Giant.
 - Add a typeface setting: Sans, Rounded, Serif, or Mono, picked from four tiles that each show their own face.
 - Text size is a slider in Settings. The sidebar is a fixed width, toggle only.
 - Add a text size setting with five steps, in Settings and as Bigger Text (⌘+) and Smaller Text (⌘-) in the View menu. Rows, circles, and rings scale with it.

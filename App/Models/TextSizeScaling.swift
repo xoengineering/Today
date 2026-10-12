@@ -6,6 +6,7 @@ extension TextSize {
   var scale: Double {
     switch self {
     case .extraLarge: 1.3
+    case .giant: 1.75
     case .huge: 1.5
     case .large: 1.15
     case .medium: 1

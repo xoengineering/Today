@@ -5,12 +5,12 @@ import TodayKit
   @Test func stepsUpAndDownAndStopsAtTheEnds() {
     #expect(TextSize.medium.bigger == .large)
     #expect(TextSize.medium.smaller == .small)
-    #expect(TextSize.huge.bigger == .huge)
+    #expect(TextSize.giant.bigger == .giant)
     #expect(TextSize.small.smaller == .small)
   }
 
-  @Test func hasFiveStepsWithMediumSecond() {
-    #expect(TextSize.allCases.count == 5)
+  @Test func hasSixStepsWithMediumSecond() {
+    #expect(TextSize.allCases.count == 6)
     #expect(TextSize.allCases[1] == .medium)
   }
 }

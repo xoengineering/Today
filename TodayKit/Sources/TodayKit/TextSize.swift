@@ -1,14 +1,16 @@
-/// How big the app's text is, in five steps where Medium is the system's own size.
+/// How big the app's text is, in six steps where Medium is the system's own size.
 public enum TextSize: String, Codable, CaseIterable, Hashable, Sendable {
   case small
   case medium
   case large
   case extraLarge
   case huge
+  case giant
 
   public var label: String {
     switch self {
     case .extraLarge: "Extra Large"
+    case .giant: "Giant"
     case .huge: "Huge"
     case .large: "Large"
     case .medium: "Medium"
