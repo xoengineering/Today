@@ -2,6 +2,8 @@ import SwiftUI
 import TodayKit
 
 /// One day on the Rings screen: the ring, the date, and "Today" or "Yesterday" when it applies.
+///
+/// The finished count is shown only while everything fits on one line. The date never wraps for its sake.
 struct RingRow: View {
   @Environment(RemindersStore.self) private var store
   @Environment(\.textScale) private var textScale
@@ -12,19 +14,35 @@ struct RingRow: View {
     HStack(spacing: 12) {
       RingView(ring: ring)
         .frame(width: 28 * textScale, height: 28 * textScale)
-      Text(store.settings.dateFormat.format(ring.day))
-      if let relation {
-        Text("(\(relation))")
-          .foregroundStyle(.secondary)
-      }
-      Spacer()
-      if ring.total > 0 {
-        Text("\(ring.completed) of \(ring.total)")
-          .foregroundStyle(.secondary)
-          .monospacedDigit()
+      ViewThatFits(in: .horizontal) {
+        HStack(spacing: 12) {
+          labels.fixedSize()
+          Spacer(minLength: 12)
+          count
+        }
+        HStack(spacing: 12) {
+          labels.fixedSize()
+          Spacer(minLength: 0)
+        }
+        labels
       }
     }
     .scaledFont(.body)
     .padding(.vertical, 4)
+  }
+
+  /// One string, so the relation wraps along with the date instead of standing beside it.
+  private var labels: Text {
+    let date = Text(store.settings.dateFormat.format(ring.day))
+    guard let relation else { return date }
+    return date + Text(" (\(relation))").foregroundStyle(.secondary)
+  }
+
+  @ViewBuilder private var count: some View {
+    if ring.total > 0 {
+      Text("\(ring.completed) of \(ring.total)")
+        .foregroundStyle(.secondary)
+        .monospacedDigit()
+    }
   }
 }

@@ -12,6 +12,7 @@ struct BacklogListView: View {
       }
       AddItemField(bucket: .backlog)
     }
+    .id(store.settings.textSize.rawValue + store.settings.fontTheme.rawValue)
     .overlay {
       if store.backlogItems.isEmpty {
         EmptyBucketView(bucket: .backlog)

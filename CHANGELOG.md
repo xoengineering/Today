@@ -4,6 +4,8 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Rings rows keep the date on one line and drop the finished count when there isn't room. "(Today)" and "(Yesterday)" are part of the date string.
+- Lists re-measure their rows when the text size or typeface changes, so rows never keep a stale height.
 - The in-progress circle is split from bottom left to top right, and the three states crossfade with the half-filled one swinging into place on a small spring.
 - Swipe actions show icons only, with an X for Delete.
 - The add row and a title being edited grow with their text instead of scrolling sideways.
