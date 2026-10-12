@@ -24,6 +24,8 @@ struct TodayListView: View {
           .allowsHitTesting(false)
       }
     }
+    .listStyle(.plain)
     .navigationTitle("Today")
+    .toolbarTitleDisplayMode(.inline)
   }
 }

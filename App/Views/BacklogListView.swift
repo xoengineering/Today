@@ -19,6 +19,8 @@ struct BacklogListView: View {
           .allowsHitTesting(false)
       }
     }
+    .listStyle(.plain)
     .navigationTitle("Backlog")
+    .toolbarTitleDisplayMode(.inline)
   }
 }

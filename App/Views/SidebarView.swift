@@ -10,6 +10,7 @@ struct SidebarView: View {
       Label(screen.title, systemImage: selection == screen ? screen.selectedSymbol : screen.symbol)
     }
     .navigationTitle("Today")
+    .toolbarTitleDisplayMode(.inline)
     #if os(iOS)
       // macOS has the Settings scene and ⌘, for this.
       .toolbar {

@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Titles stay in the title bar on iOS, and lists are plain rows on the background rather than cards.
 - Settings panes show their content on iOS.
 - Rows use each platform's own list insets. Only the 8 points between a circle and its text is set by the app.
 - On iOS, Return submits the add field and commits a title edit instead of inserting a newline.

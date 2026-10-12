@@ -10,7 +10,9 @@ struct RingsView: View {
     List(rings, id: \.day) { ring in
       RingRow(ring: ring, relation: relation(of: ring.day))
     }
+    .listStyle(.plain)
     .navigationTitle("Rings")
+    .toolbarTitleDisplayMode(.inline)
     .task(id: store.reloadCount) {
       let today = store.today
       let history = await store.fetchHistory()
