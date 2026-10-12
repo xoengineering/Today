@@ -4,20 +4,18 @@ public enum CheckState: Hashable, Sendable, CaseIterable {
   case doing
   case done
 
-  /// The state a click moves to, round and round.
+  /// The state a click moves to, stopping at done.
   public var next: Self {
     switch self {
     case .todo: .doing
-    case .doing: .done
-    case .done: .todo
+    case .doing, .done: .done
     }
   }
 
-  /// The state an option-click moves to, the other way round.
+  /// The state an option-click moves to, stopping at to do.
   public var previous: Self {
     switch self {
-    case .todo: .done
-    case .doing: .todo
+    case .todo, .doing: .todo
     case .done: .doing
     }
   }
