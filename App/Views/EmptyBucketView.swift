@@ -34,8 +34,8 @@ struct EmptyBucketView: View {
 
   private var headline: String {
     switch bucket {
-    case .today: finishedEverything ? "All done for today." : "Nothing on the list for today."
-    case .backlog: "The backlog is empty."
+    case .today: finishedEverything ? "All done for today" : "Nothing on the list for today"
+    case .backlog: "The backlog is empty"
     }
   }
 
@@ -43,10 +43,10 @@ struct EmptyBucketView: View {
     switch bucket {
     case .today:
       finishedEverything
-        ? "\(store.completedTodayCount) finished. Enjoy the rest of it."
-        : "Add something, or pull something in from the Backlog."
+        ? "\(store.completedTodayCount) finished, enjoy the rest of it"
+        : "Add something, or pull something in from the Backlog"
     case .backlog:
-      "Nothing is waiting on you."
+      "Nothing is waiting on you"
     }
   }
 }

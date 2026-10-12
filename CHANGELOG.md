@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- The empty Today and Backlog states drop their trailing periods.
 - Settings on macOS fits its content with no scrolling, no longer hands keyboard focus to the end-of-day stepper on open, and explains each section in one line.
 - Add Settings: the end-of-day time and the two Reminders lists. A Settings window on macOS, a sheet on iOS.
 - The empty Today state celebrates when something was finished today, and invites when nothing was planned.
