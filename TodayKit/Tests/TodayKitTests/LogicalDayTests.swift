@@ -54,6 +54,16 @@ import TodayKit
         == LogicalDay(year: 2026, month: 2, day: 28))
   }
 
+  @Test func advancingByAYearLandsOnTheSameDate() {
+    #expect(
+      LogicalDay(year: 2026, month: 10, day: 11).advanced(by: -1, .year, calendar: calendar)
+        == LogicalDay(year: 2025, month: 10, day: 11))
+    // 2024 is a leap year. Its February 29 has no twin a year later, so the calendar clamps.
+    #expect(
+      LogicalDay(year: 2024, month: 2, day: 29).advanced(by: 1, .year, calendar: calendar)
+        == LogicalDay(year: 2025, month: 2, day: 28))
+  }
+
   @Test func comparesChronologically() {
     #expect(LogicalDay(year: 2026, month: 1, day: 31) < LogicalDay(year: 2026, month: 2, day: 1))
     #expect(LogicalDay(year: 2025, month: 12, day: 31) < LogicalDay(year: 2026, month: 1, day: 1))

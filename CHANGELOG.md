@@ -4,6 +4,8 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Rings is a list, newest day first, from today back to the first day anything was on the Today list. Each row shows the ring, the date, "Today" or "Yesterday" when it applies, and how many of that day's items were finished.
+- Add a date format setting for the Rings list: System, ISO 8601, Long, Weekday and long, or Numeric.
 - The Rings title bar spans the whole window, like the other screens, instead of only the grid's width.
 - Add `script/index`, which hands Xcode's build settings to sourcekit-lsp through xcode-build-server so editors other than Xcode resolve `TodayKit`, `Testing`, and `PackageDescription`. The `Today` scheme now tests the package.
 - The empty Today and Backlog states drop their trailing periods.

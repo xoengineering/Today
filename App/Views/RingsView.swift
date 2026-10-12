@@ -1,44 +1,31 @@
 import SwiftUI
 import TodayKit
 
-/// The day rings, a week per row, the most recent weeks.
+/// The day rings, one per row, today at the top.
 struct RingsView: View {
   @Environment(RemindersStore.self) private var store
   @State private var rings: [DayRing] = []
 
-  private let weeks = 8
-  private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 7)
-
   var body: some View {
-    ScrollView {
-      LazyVGrid(columns: columns, spacing: 12) {
-        ForEach(RingCalendar.weekdaySymbols(), id: \.self) { symbol in
-          Text(symbol)
-            .font(.caption)
-            .foregroundStyle(.secondary)
-        }
-        ForEach(rings, id: \.day) { ring in
-          VStack(spacing: 4) {
-            RingView(ring: ring)
-              .frame(width: 36, height: 36)
-              .opacity(ring.day > store.today ? 0.3 : 1)
-            Text("\(ring.day.day)")
-              .font(.caption2)
-              .foregroundStyle(ring.day == store.today ? .primary : .secondary)
-          }
-        }
-      }
-      .padding()
-      .frame(maxWidth: 480)
-      // The scroll content spans the window, so the title bar does too. Only the grid is capped.
-      .frame(maxWidth: .infinity)
+    List(rings, id: \.day) { ring in
+      RingRow(ring: ring, relation: relation(of: ring.day))
     }
     .navigationTitle("Rings")
     .task(id: store.reloadCount) {
+      let today = store.today
       let history = await store.fetchHistory()
-      let days = RingCalendar.days(endingOn: store.today, weeks: weeks)
-      guard let first = days.first, let last = days.last else { return }
-      rings = DayRing.computeRange(from: first, through: last, items: history, endOfDay: store.settings.endOfDay)
+      // The last row is the first day anything was ever on the Today list. Before that there is nothing to say.
+      let first = history.compactMap { $0.metadata?.days.first }.min() ?? today
+      let oldestFirst = DayRing.computeRange(from: first, through: today, items: history, endOfDay: store.settings.endOfDay)
+      rings = oldestFirst.reversed()
+    }
+  }
+
+  private func relation(of day: LogicalDay) -> String? {
+    switch day {
+    case store.today: "Today"
+    case store.today.advanced(by: -1): "Yesterday"
+    default: nil
     }
   }
 }

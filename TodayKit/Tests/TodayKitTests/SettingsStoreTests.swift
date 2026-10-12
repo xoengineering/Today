@@ -28,6 +28,17 @@ import TodayKit
     }
   }
 
+  @Test func settingsSavedBeforeAKeyExistedKeepTheirOtherValues() throws {
+    try withDefaults { defaults in
+      let older = Data(#"{"endOfDay":{"hour":2,"minute":0},"todayListIdentifier":"t"}"#.utf8)
+      defaults.set(older, forKey: SettingsStore.key)
+      let loaded = SettingsStore(defaults: defaults).load()
+      #expect(loaded.endOfDay == EndOfDay(hour: 2))
+      #expect(loaded.todayListIdentifier == "t")
+      #expect(loaded.dateFormat == .system)
+    }
+  }
+
   @Test func unreadableDataFallsBackToDefaults() throws {
     try withDefaults { defaults in
       defaults.set(Data("nope".utf8), forKey: SettingsStore.key)

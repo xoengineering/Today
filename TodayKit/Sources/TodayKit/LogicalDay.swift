@@ -41,8 +41,13 @@ public struct LogicalDay: Hashable, Comparable, Sendable, CustomStringConvertibl
   }
 
   public func advanced(by days: Int, calendar: Calendar = .current) -> Self {
+    advanced(by: days, .day, calendar: calendar)
+  }
+
+  /// The day this many calendar units away, so a year back lands on the same date, leap years included.
+  public func advanced(by value: Int, _ component: Calendar.Component, calendar: Calendar = .current) -> Self {
     let start = calendar.date(from: DateComponents(year: year, month: month, day: day)) ?? .distantPast
-    let shifted = calendar.date(byAdding: .day, value: days, to: start) ?? start
+    let shifted = calendar.date(byAdding: component, value: value, to: start) ?? start
     let components = calendar.dateComponents([.year, .month, .day], from: shifted)
     return Self(year: components.year ?? year, month: components.month ?? month, day: components.day ?? day)
   }

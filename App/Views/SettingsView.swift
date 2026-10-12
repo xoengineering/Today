@@ -29,6 +29,17 @@ struct SettingsView: View {
       } footer: {
         Text("This app only uses these two Reminders lists")
       }
+      Section {
+        Picker("Date format", selection: dateFormatBinding) {
+          ForEach(DateFormatChoice.allCases, id: \.self) { choice in
+            Text(choice.label).tag(choice)
+          }
+        }
+      } header: {
+        Text("Rings")
+      } footer: {
+        Text("Today is \(store.settings.dateFormat.format(store.today))")
+      }
     }
     .formStyle(.grouped)
     // The window fits the form. Nothing here is long enough to scroll.
@@ -50,6 +61,11 @@ struct SettingsView: View {
         let endOfDay = EndOfDay(hour: components.hour ?? 4, minute: components.minute ?? 0)
         Task { await store.setEndOfDay(endOfDay) }
       })
+  }
+
+  private var dateFormatBinding: Binding<DateFormatChoice> {
+    @Bindable var store = store
+    return $store.settings.dateFormat
   }
 
   private var todayListBinding: Binding<String> {
