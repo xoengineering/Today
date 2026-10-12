@@ -11,7 +11,7 @@ struct EmptyBucketView: View {
     VStack(spacing: 12) {
       Image(systemName: symbol)
         .font(.system(size: 44 * textScale))
-        .foregroundStyle(.tint)
+        .foregroundStyle(.secondary)
         .symbolEffect(.bounce, value: store.completedTodayCount)
       Text(headline)
         .scaledFont(.title3)

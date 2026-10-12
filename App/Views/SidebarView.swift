@@ -7,7 +7,13 @@ struct SidebarView: View {
 
   var body: some View {
     List(Screen.allCases, selection: $selection) { screen in
-      Label(screen.title, systemImage: selection == screen ? screen.selectedSymbol : screen.symbol)
+      Label {
+        Text(screen.title)
+      } icon: {
+        // Filled when selected, outlined otherwise, always in the text's own color.
+        Image(systemName: selection == screen ? screen.selectedSymbol : screen.symbol)
+          .foregroundStyle(.primary)
+      }
     }
     .navigationTitle("Today")
     .toolbarTitleDisplayMode(.inline)
