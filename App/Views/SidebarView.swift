@@ -11,8 +11,10 @@ struct SidebarView: View {
         Text(screen.title)
       } icon: {
         // Filled when selected, outlined otherwise, always in the text's own color.
+        // The macOS sidebar tints label icons with the accent color. A concrete color, not the hierarchical
+        // style, is what overrides that.
         Image(systemName: selection == screen ? screen.selectedSymbol : screen.symbol)
-          .foregroundStyle(.primary)
+          .foregroundStyle(Color.primary)
       }
     }
     .navigationTitle("Today")
