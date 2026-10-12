@@ -61,8 +61,6 @@ struct ItemRow: View {
           .onTapGesture { isEditing = true }
       }
     }
-    // 8 between rows, the same as between the circle and the text. The list's own inset is replaced, not added to.
-    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
     // The separator would run under the baseline, through the circle's bottom and every descender.
     .listRowSeparator(.hidden)
     .onChange(of: item.title) { _, newTitle in

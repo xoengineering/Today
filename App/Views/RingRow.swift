@@ -27,7 +27,6 @@ struct RingRow: View {
       }
     }
     .scaledFont(.body)
-    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
   }
 
   /// One string, so the relation wraps along with the date instead of standing beside it.

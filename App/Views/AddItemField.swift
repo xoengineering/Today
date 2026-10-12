@@ -44,7 +44,6 @@ struct AddItemField: View {
           }
       }
     }
-    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
     .listRowSeparator(.hidden)
     .onChange(of: navigation.addItemRequest) {
       isFocused = true

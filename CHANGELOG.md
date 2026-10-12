@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Rows use each platform's own list insets. Only the 8 points between a circle and its text is set by the app.
 - On iOS, Return submits the add field and commits a title edit instead of inserting a newline.
 - `script/run device` builds, installs, and launches on a paired iPhone or iPad.
 - Rows use the same 8 points between the circle and the text as between one row and the next, and day rings draw their stroke inside their box so they line up with the item circles.
