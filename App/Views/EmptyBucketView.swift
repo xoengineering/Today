@@ -4,17 +4,19 @@ import TodayKit
 /// What an empty bucket shows, since reaching it is the point.
 struct EmptyBucketView: View {
   @Environment(RemindersStore.self) private var store
+  @Environment(\.textScale) private var textScale
   let bucket: Bucket
 
   var body: some View {
     VStack(spacing: 12) {
       Image(systemName: symbol)
-        .font(.system(size: 44))
+        .font(.system(size: 44 * textScale))
         .foregroundStyle(.tint)
         .symbolEffect(.bounce, value: store.completedTodayCount)
       Text(headline)
-        .font(.title3)
+        .scaledFont(.title3)
       Text(detail)
+        .scaledFont(.body)
         .foregroundStyle(.secondary)
     }
     .multilineTextAlignment(.center)

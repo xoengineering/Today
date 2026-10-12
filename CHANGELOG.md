@@ -4,6 +4,9 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Add a text size setting with five steps, in Settings and as Bigger Text (⌘+) and Smaller Text (⌘-) in the View menu. Rows, circles, and rings scale with it.
+- Titles show as wrapping text and become a field on click, so rows grow with long titles and larger text.
+- The window is at least 600 by 320, and the content takes whatever width the sidebar leaves, so nothing is pushed off the window's edges.
 - Window tabbing is off on macOS, so the View and Window menus no longer offer tabs.
 - The plus in the add row is a button that puts the cursor in the field.
 - List rows have no separator lines, land at their final height when inserted, and wrap long titles instead of truncating them.

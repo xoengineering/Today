@@ -30,6 +30,13 @@ struct SettingsView: View {
         Text("This app only uses these two Reminders lists")
       }
       Section {
+        Picker("Text size", selection: textSizeBinding) {
+          ForEach(TextSize.allCases, id: \.self) { size in
+            Text(size.label).tag(size)
+          }
+        }
+      }
+      Section {
         Picker("Date format", selection: dateFormatBinding) {
           ForEach(DateFormatChoice.allCases, id: \.self) { choice in
             Text(choice.label).tag(choice)
@@ -61,6 +68,11 @@ struct SettingsView: View {
         let endOfDay = EndOfDay(hour: components.hour ?? 4, minute: components.minute ?? 0)
         Task { await store.setEndOfDay(endOfDay) }
       })
+  }
+
+  private var textSizeBinding: Binding<TextSize> {
+    @Bindable var store = store
+    return $store.settings.textSize
   }
 
   private var dateFormatBinding: Binding<DateFormatChoice> {

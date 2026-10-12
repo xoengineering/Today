@@ -9,7 +9,7 @@ struct CheckCircle: View {
   var body: some View {
     Button(action: action) {
       Image(systemName: symbol)
-        .font(.title3)
+        .scaledFont(.title3)
         .foregroundStyle(state == .todo ? .secondary : Color.accentColor)
         .contentTransition(.symbolEffect(.replace))
     }

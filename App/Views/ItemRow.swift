@@ -2,10 +2,14 @@ import SwiftUI
 import TodayKit
 
 /// One reminder, as its circle and its title, which edits in place.
+///
+/// The title shows as text, which wraps and sizes its row. A click swaps in a field. Return or leaving commits.
 struct ItemRow: View {
   @Environment(RemindersStore.self) private var store
   let item: TodayItem
   @State private var title: String
+  @State private var isEditing = false
+  @FocusState private var isFieldFocused: Bool
 
   init(item: TodayItem) {
     self.item = item
@@ -19,12 +23,26 @@ struct ItemRow: View {
           store.set(item, to: item.checkState.next)
         }
       }
-      // The vertical axis lets a long title wrap onto more lines instead of trailing off.
-      TextField("Title", text: $title, axis: .vertical)
-        .textFieldStyle(.plain)
-        .strikethrough(item.checkState == .done)
-        .foregroundStyle(item.checkState == .done ? .secondary : .primary)
-        .onSubmit { store.rename(item, to: title) }
+      if isEditing {
+        TextField("Title", text: $title)
+          .scaledFont(.body)
+          .textFieldStyle(.plain)
+          .focused($isFieldFocused)
+          .onSubmit(commit)
+          .onChange(of: isFieldFocused) { _, focused in
+            if !focused { commit() }
+          }
+          .onAppear { isFieldFocused = true }
+      } else {
+        Text(item.title)
+          .scaledFont(.body)
+          .strikethrough(item.checkState == .done)
+          .foregroundStyle(item.checkState == .done ? .secondary : .primary)
+          .fixedSize(horizontal: false, vertical: true)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .contentShape(Rectangle())
+          .onTapGesture { isEditing = true }
+      }
     }
     .padding(.vertical, 4)
     // The separator would run under the baseline, through the circle's bottom and every descender.
@@ -43,6 +61,11 @@ struct ItemRow: View {
     .swipeActions(edge: .trailing) {
       Button("Delete", role: .destructive) { store.delete(item) }
     }
+  }
+
+  private func commit() {
+    isEditing = false
+    store.rename(item, to: title)
   }
 
   @ViewBuilder private var moveButton: some View {

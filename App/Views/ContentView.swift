@@ -12,23 +12,20 @@ struct ContentView: View {
           SidebarView(selection: $navigation.screen)
             .navigationSplitViewColumnWidth(min: 160, ideal: 200, max: 280)
         } detail: {
-          Group {
-            switch navigation.screen {
-            case .today, .none: TodayListView()
-            case .backlog: BacklogListView()
-            case .rings: RingsView()
-            }
+          switch navigation.screen {
+          case .today, .none: TodayListView()
+          case .backlog: BacklogListView()
+          case .rings: RingsView()
           }
-          #if os(macOS)
-            .frame(minWidth: 400)
-          #endif
         }
       } else {
         AccessView()
       }
     }
+    .environment(\.textScale, store.settings.textSize.scale)
     #if os(macOS)
-      .frame(minWidth: 480, minHeight: 320)
+      // The sidebar's widest plus 320 for content. The content has no minimum of its own, so nothing is ever clipped.
+      .frame(minWidth: 600, minHeight: 320)
     #endif
     .task {
       if store.authorization == .notDetermined {

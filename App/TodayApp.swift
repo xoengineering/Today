@@ -18,7 +18,7 @@ struct TodayApp: App {
         .environment(navigation)
     }
     .commands {
-      TodayCommands(navigation: navigation)
+      TodayCommands(navigation: navigation, store: store)
     }
 
     #if os(macOS)

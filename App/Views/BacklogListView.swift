@@ -12,7 +12,6 @@ struct BacklogListView: View {
       }
       AddItemField(bucket: .backlog)
     }
-    .environment(\.defaultMinListRowHeight, 32)
     .overlay {
       if store.backlogItems.isEmpty {
         EmptyBucketView(bucket: .backlog)

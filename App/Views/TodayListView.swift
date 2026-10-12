@@ -15,8 +15,6 @@ struct TodayListView: View {
       }
       AddItemField(bucket: .today)
     }
-    // A known row height, so newly inserted rows are never laid out from a stale estimate and overlap.
-    .environment(\.defaultMinListRowHeight, 32)
     .overlay {
       if store.todayItems.isEmpty {
         EmptyBucketView(bucket: .today)

@@ -15,12 +15,13 @@ struct AddItemField: View {
         isFocused = true
       } label: {
         Image(systemName: "plus.circle")
-          .font(.title3)
+          .scaledFont(.title3)
           .foregroundStyle(.tertiary)
       }
       .buttonStyle(.plain)
       .accessibilityLabel(prompt)
       TextField(prompt, text: $title)
+        .scaledFont(.body)
         .textFieldStyle(.plain)
         .focused($isFocused)
         .onSubmit(add)
