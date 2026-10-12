@@ -33,7 +33,15 @@ struct AddItemField: View {
           .scaledFont(.body)
           .textFieldStyle(.plain)
           .focused($isFocused)
+          .submitLabel(.done)
           .onSubmit(add)
+          // On iOS, Return in a growing field inserts a newline instead of submitting. A newline means submit here.
+          .onChange(of: title) { _, newTitle in
+            if newTitle.contains("\n") {
+              title = newTitle.replacingOccurrences(of: "\n", with: "")
+              add()
+            }
+          }
       }
     }
     .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))

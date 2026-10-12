@@ -36,7 +36,15 @@ struct ItemRow: View {
             .scaledFont(.body)
             .textFieldStyle(.plain)
             .focused($isFieldFocused)
+            .submitLabel(.done)
             .onSubmit(commit)
+            // On iOS, Return in a growing field inserts a newline instead of submitting. A newline means commit here.
+            .onChange(of: title) { _, newTitle in
+              if newTitle.contains("\n") {
+                title = newTitle.replacingOccurrences(of: "\n", with: "")
+                commit()
+              }
+            }
             .onChange(of: isFieldFocused) { _, focused in
               if !focused { commit() }
             }

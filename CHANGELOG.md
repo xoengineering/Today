@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- On iOS, Return submits the add field and commits a title edit instead of inserting a newline.
 - `script/run device` builds, installs, and launches on a paired iPhone or iPad.
 - Rows use the same 8 points between the circle and the text as between one row and the next, and day rings draw their stroke inside their box so they line up with the item circles.
 - Day rings grow with the text size more gently than the text itself.
