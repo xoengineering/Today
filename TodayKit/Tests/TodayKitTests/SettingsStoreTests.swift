@@ -41,6 +41,15 @@ import TodayKit
     }
   }
 
+  @Test func rememberesTheLastRolloverDay() throws {
+    try withDefaults { defaults in
+      let store = SettingsStore(defaults: defaults)
+      #expect(store.loadLastRolloverDay() == nil)
+      store.save(lastRolloverDay: LogicalDay(year: 2026, month: 10, day: 11))
+      #expect(store.loadLastRolloverDay() == LogicalDay(year: 2026, month: 10, day: 11))
+    }
+  }
+
   @Test func unreadableDataFallsBackToDefaults() throws {
     try withDefaults { defaults in
       defaults.set(Data("nope".utf8), forKey: SettingsStore.key)

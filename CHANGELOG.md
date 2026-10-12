@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Each device rolls the Today list over once per logical day, on its first load of that day, instead of on every sync. Two devices with different reset times no longer return each other's fresh items to the Backlog.
 - Sidebar symbols take the text color, and the empty-state art is gray.
 - A tap on a list's empty area, Return on an empty add field, or a scroll drops field focus, which on iOS dismisses the keyboard.
 - The end-of-day setting has its own header, with the row named Reset time.

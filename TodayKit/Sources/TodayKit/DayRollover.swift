@@ -19,15 +19,17 @@ public enum DayRollover {
 
   /// The items as they should be after rollover, in the same order.
   ///
-  /// Unchanged items come back as they were.
-  public static func apply(to items: [TodayItem], today: LogicalDay) -> [TodayItem] {
+  /// Unchanged items come back as they were. With `returningStale` false, only adoption happens: items are claimed
+  /// but nothing goes back to the Backlog. That is every load except the first one of a new day, so two devices
+  /// whose days disagree by an hour don't take turns undoing each other.
+  public static func apply(to items: [TodayItem], today: LogicalDay, returningStale: Bool = true) -> [TodayItem] {
     var nextOrder = items.compactMap(\.order).max().map { $0 + 1 } ?? 0
     return items.map { item in
       switch action(for: item, today: today) {
       case .keep:
         return item
       case .returnToBacklog:
-        return item.movedToBacklog()
+        return returningStale ? item.movedToBacklog() : item
       case .adopt:
         let adopted = item.movedToToday(on: today, order: nextOrder)
         nextOrder += 1

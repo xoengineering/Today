@@ -35,6 +35,17 @@ import TodayKit
     #expect(DayRollover.action(for: future, today: today) == .keep)
   }
 
+  @Test func applyWithoutReturningStaleOnlyAdopts() {
+    let items = [
+      TodayItem(
+        id: "stale", title: "Stale", bucket: .today, metadata: ItemMetadata(order: 0, state: .doing, days: [yesterday])),
+      TodayItem(id: "new", title: "New", bucket: .today),
+    ]
+    let applied = DayRollover.apply(to: items, today: today, returningStale: false)
+    #expect(applied[0] == items[0])
+    #expect(applied[1].metadata?.days == [today])
+  }
+
   @Test func applyMovesReturnsAndAdoptsInOnePass() {
     let items = [
       TodayItem(

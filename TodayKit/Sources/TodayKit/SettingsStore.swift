@@ -24,4 +24,15 @@ public struct SettingsStore {
     guard let data = try? JSONEncoder().encode(settings) else { return }
     defaults.set(data, forKey: Self.key)
   }
+
+  /// The last logical day this device rolled the Today list over, so it rolls once per day rather than on every load.
+  public static let lastRolloverDayKey = "lastRolloverDay"
+
+  public func loadLastRolloverDay() -> LogicalDay? {
+    defaults.string(forKey: Self.lastRolloverDayKey).flatMap(LogicalDay.init)
+  }
+
+  public func save(lastRolloverDay day: LogicalDay) {
+    defaults.set(day.description, forKey: Self.lastRolloverDayKey)
+  }
 }

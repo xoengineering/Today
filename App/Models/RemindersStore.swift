@@ -152,7 +152,14 @@ final class RemindersStore {
   func reload() async {
     guard hasAccess, let todayList, let backlogList else { return }
     let fetched = await fetchItems(in: [todayList, backlogList], todayListIdentifier: todayList.calendarIdentifier)
-    let rolled = DayRollover.apply(to: fetched, today: today)
+    // Unfinished items go back to the Backlog once per logical day, the first time this device loads in that day.
+    // Every other load only adopts items that arrived in the Today list without a history.
+    let today = today
+    let isNewDay = settingsStore.loadLastRolloverDay() != today
+    let rolled = DayRollover.apply(to: fetched, today: today, returningStale: isNewDay)
+    if isNewDay {
+      settingsStore.save(lastRolloverDay: today)
+    }
     let changed = zip(fetched, rolled).filter { $0 != $1 }.map(\.1)
     if !changed.isEmpty {
       save(changed)
