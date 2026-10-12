@@ -1,0 +1,67 @@
+name: Today
+options:
+  bundleIdPrefix: engineering.xo
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "27.0"
+    macOS: "27.0"
+packages:
+  TodayKit:
+    path: TodayKit
+# DEVELOPMENT_TEAM and the signing style live here, untracked, so the repo carries nobody's team ID.
+# The generated project is gitignored, so the value XcodeGen bakes in never reaches a commit.
+configFiles:
+  Debug: Local.xcconfig
+  Release: Local.xcconfig
+settings:
+  base:
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.0
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    # The app group the app and widget share settings through.
+    # iOS requires the group. prefix. macOS outside the App Store uses the team prefix, which needs no provisioning profile.
+    APP_GROUP_IDENTIFIER[sdk=iphone*]: group.engineering.xo.Today
+    APP_GROUP_IDENTIFIER[sdk=macosx*]: $(TeamIdentifierPrefix)engineering.xo.Today
+targets:
+  Today:
+    type: application
+    supportedDestinations: [iOS, macOS]
+    sources: [App]
+    dependencies:
+      - package: TodayKit
+      - target: TodayWidgets
+    settings:
+      base:
+        CODE_SIGN_ENTITLEMENTS: App/Today.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: engineering.xo.Today
+        TARGETED_DEVICE_FAMILY: "1,2"
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Today
+        NSRemindersFullAccessUsageDescription: Today is a view on your Reminders. It reads and edits the reminders in your Today and Backlog lists, and nothing else.
+        TodayAppGroupIdentifier: $(APP_GROUP_IDENTIFIER)
+        UILaunchScreen: {}
+  TodayWidgets:
+    type: app-extension
+    supportedDestinations: [iOS, macOS]
+    sources: [Widgets]
+    dependencies:
+      - package: TodayKit
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    settings:
+      base:
+        CODE_SIGN_ENTITLEMENTS: Widgets/TodayWidgets.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: engineering.xo.Today.Widgets
+        SKIP_INSTALL: true
+        TARGETED_DEVICE_FAMILY: "1,2"
+    info:
+      path: Widgets/Info.plist
+      properties:
+        CFBundleDisplayName: Today
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        NSRemindersFullAccessUsageDescription: The Today widget shows the reminders in your Today list.
+        TodayAppGroupIdentifier: $(APP_GROUP_IDENTIFIER)

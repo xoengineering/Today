@@ -1,0 +1,8 @@
+#!/bin/sh
+# script/test: run the TodayKit test suite.
+
+set -e
+
+cd "$(dirname "$0")/../TodayKit"
+
+swift test "$@"

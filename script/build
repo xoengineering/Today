@@ -1,0 +1,37 @@
+#!/bin/sh
+# script/build: build the app for macOS (default) or iOS (script/build ios).
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+script/generate
+
+# Local builds sign with the team in Local.xcconfig. CI has no identity.
+if [ -n "$CI" ]; then
+  SIGNING="CODE_SIGNING_ALLOWED=NO"
+else
+  SIGNING="-allowProvisioningUpdates"
+fi
+
+case "${1:-macos}" in
+  macos)
+    # shellcheck disable=SC2086
+    xcodebuild -project Today.xcodeproj \
+      -scheme Today \
+      -destination "platform=macOS" \
+      $SIGNING \
+      build
+    ;;
+  ios)
+    xcodebuild -project Today.xcodeproj \
+      -scheme Today \
+      -destination "generic/platform=iOS Simulator" \
+      CODE_SIGNING_ALLOWED=NO \
+      build
+    ;;
+  *)
+    echo "Usage: script/build [macos|ios]" >&2
+    exit 1
+    ;;
+esac

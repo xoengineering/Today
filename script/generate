@@ -1,0 +1,13 @@
+#!/bin/sh
+# script/generate: regenerate Today.xcodeproj from project.yml.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ ! -f Local.xcconfig ]; then
+  cp Local.xcconfig.example Local.xcconfig
+  echo "Created Local.xcconfig. Set DEVELOPMENT_TEAM in it to sign locally."
+fi
+
+xcodegen generate

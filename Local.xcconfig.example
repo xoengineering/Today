@@ -1,0 +1,17 @@
+// Local build settings. Copy to Local.xcconfig (gitignored) and fill in.
+// script/generate does that copy for you when Local.xcconfig is missing.
+//
+// DEVELOPMENT_TEAM is your Apple Developer Team ID, from
+// developer.apple.com/account, Membership details.
+// With it set, the Reminders access grant survives rebuilds,
+// and the app group shared with the widget resolves.
+//
+// Automatic signing needs an Apple Development certificate and an Xcode
+// account session for the team. If you only have a Developer ID certificate,
+// switch to manual signing instead:
+//
+//   CODE_SIGN_STYLE = Manual
+//   CODE_SIGN_IDENTITY = Developer ID Application
+
+DEVELOPMENT_TEAM =
+CODE_SIGN_STYLE = Automatic

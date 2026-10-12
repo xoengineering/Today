@@ -1,0 +1,72 @@
+#!/bin/sh
+# script/run: build and launch the app.
+#
+#   script/run              macOS
+#   script/run ios          iOS Simulator (first booted one, else iPhone 17 Pro)
+#   script/run ios "iPad Pro 11-inch (M5)"   a named simulator
+#
+# Physical devices need signing, so run those from Xcode (see README).
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+BUNDLE_ID="engineering.xo.Today"
+
+case "${1:-macos}" in
+  macos)
+    script/build macos
+    APP_PATH=$(xcodebuild -project Today.xcodeproj -scheme Today \
+      -destination "platform=macOS" -showBuildSettings build 2>/dev/null |
+      awk -F' = ' '/ BUILT_PRODUCTS_DIR/ {print $2; exit}')
+    open "$APP_PATH/Today.app"
+    ;;
+  ios)
+    script/generate
+
+    # The deployment target is 27.0, so older runtimes can't run the app.
+    WANTED="${2:-iPhone 17 Pro}"
+    UDID=$(xcrun simctl list devices available -j |
+      ruby -rjson -e '
+        wanted = ARGV[0]
+        JSON.parse($stdin.read)["devices"].each do |runtime, devices|
+          next unless runtime.include?("iOS-27")
+          devices.each do |device|
+            if device["name"] == wanted
+              puts device["udid"]
+              exit
+            end
+          end
+        end
+      ' "$WANTED")
+
+    if [ -z "$UDID" ]; then
+      echo "No iOS 27 simulator named \"$WANTED\". Available:" >&2
+      xcrun simctl list devices available -j |
+        ruby -rjson -e '
+          JSON.parse($stdin.read)["devices"].each do |runtime, devices|
+            next unless runtime.include?("iOS-27")
+            devices.each { |device| puts "  #{device["name"]}" }
+          end
+        ' >&2
+      exit 1
+    fi
+
+    xcrun simctl boot "$UDID" 2>/dev/null || true
+    open -a Simulator
+
+    xcodebuild -project Today.xcodeproj -scheme Today \
+      -destination "id=$UDID" CODE_SIGNING_ALLOWED=NO build
+
+    APP_PATH=$(xcodebuild -project Today.xcodeproj -scheme Today \
+      -destination "id=$UDID" -showBuildSettings build 2>/dev/null |
+      awk -F' = ' '/ BUILT_PRODUCTS_DIR/ {print $2; exit}')/Today.app
+
+    xcrun simctl install "$UDID" "$APP_PATH"
+    xcrun simctl launch "$UDID" "$BUNDLE_ID"
+    ;;
+  *)
+    echo "Usage: script/run [macos|ios] [simulator name]" >&2
+    exit 1
+    ;;
+esac
