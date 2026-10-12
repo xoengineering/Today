@@ -4,6 +4,10 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Window tabbing is off on macOS, so the View and Window menus no longer offer tabs.
+- The plus in the add row is a button that puts the cursor in the field.
+- List rows have no separator lines, land at their final height when inserted, and wrap long titles instead of truncating them.
+- The sidebar is between 160 and 280 points wide and the content area is at least 400.
 - Rings is a list, newest day first, from today back to the first day anything was on the Today list. Each row shows the ring, the date, "Today" or "Yesterday" when it applies, and how many of that day's items were finished.
 - Add a date format setting for the Rings list: System, ISO 8601, Long, Weekday and long, or Numeric.
 - The Rings title bar spans the whole window, like the other screens, instead of only the grid's width.

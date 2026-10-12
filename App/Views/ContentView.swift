@@ -10,12 +10,18 @@ struct ContentView: View {
       if store.hasAccess {
         NavigationSplitView {
           SidebarView(selection: $navigation.screen)
+            .navigationSplitViewColumnWidth(min: 160, ideal: 200, max: 280)
         } detail: {
-          switch navigation.screen {
-          case .today, .none: TodayListView()
-          case .backlog: BacklogListView()
-          case .rings: RingsView()
+          Group {
+            switch navigation.screen {
+            case .today, .none: TodayListView()
+            case .backlog: BacklogListView()
+            case .rings: RingsView()
+            }
           }
+          #if os(macOS)
+            .frame(minWidth: 400)
+          #endif
         }
       } else {
         AccessView()

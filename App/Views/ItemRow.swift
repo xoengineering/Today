@@ -13,19 +13,22 @@ struct ItemRow: View {
   }
 
   var body: some View {
-    HStack(spacing: 12) {
+    HStack(alignment: .top, spacing: 12) {
       CheckCircle(state: item.checkState) {
         withAnimation {
           store.set(item, to: item.checkState.next)
         }
       }
-      TextField("Title", text: $title)
+      // The vertical axis lets a long title wrap onto more lines instead of trailing off.
+      TextField("Title", text: $title, axis: .vertical)
         .textFieldStyle(.plain)
         .strikethrough(item.checkState == .done)
         .foregroundStyle(item.checkState == .done ? .secondary : .primary)
         .onSubmit { store.rename(item, to: title) }
     }
     .padding(.vertical, 4)
+    // The separator would run under the baseline, through the circle's bottom and every descender.
+    .listRowSeparator(.hidden)
     .onChange(of: item.title) { _, newTitle in
       title = newTitle
     }

@@ -11,15 +11,22 @@ struct AddItemField: View {
 
   var body: some View {
     HStack(spacing: 12) {
-      Image(systemName: "plus.circle")
-        .font(.title3)
-        .foregroundStyle(.tertiary)
+      Button {
+        isFocused = true
+      } label: {
+        Image(systemName: "plus.circle")
+          .font(.title3)
+          .foregroundStyle(.tertiary)
+      }
+      .buttonStyle(.plain)
+      .accessibilityLabel(prompt)
       TextField(prompt, text: $title)
         .textFieldStyle(.plain)
         .focused($isFocused)
         .onSubmit(add)
     }
     .padding(.vertical, 4)
+    .listRowSeparator(.hidden)
     .onChange(of: navigation.addItemRequest) {
       isFocused = true
     }
