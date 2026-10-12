@@ -47,7 +47,12 @@ targets:
   Today:
     type: application
     supportedDestinations: [iOS, macOS]
-    sources: [App]
+    sources:
+      - App
+      # The Icon Composer document is one resource, not a folder of sources.
+      - path: App/Today.icon
+        type: file
+        buildPhase: resources
     dependencies:
       - package: TodayKit
       - target: TodayWidgets
@@ -59,6 +64,7 @@ targets:
           enabled: 1
     settings:
       base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: Today
         CODE_SIGN_ENTITLEMENTS: App/Today.entitlements
         PRODUCT_BUNDLE_IDENTIFIER: engineering.xo.Today
         TARGETED_DEVICE_FAMILY: "1,2"

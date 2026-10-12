@@ -14,6 +14,11 @@ Platform quirks, SDK gotchas, and tool behaviors met while building Today. Each 
 - Xcode 27.0 on this machine has no `Simulator.app` anywhere under `Xcode.app`, so `open -a Simulator` fails. `simctl` still boots devices, installs, launches, grants privacy (`xcrun simctl privacy <udid> grant reminders engineering.xo.Today`), and takes screenshots (`xcrun simctl io <udid> screenshot out.png`) headless. `script/run ios` treats the window as optional.
 - The iOS 27.0 runtime ships `iPhone 17`, `iPhone 17e`, `iPhone Air`, and `iPhone 18 Pro` devices. There is no `iPhone 17 Pro` in it.
 
+## App icon
+
+- The app icon is an Icon Composer document, `App/Today.icon`: an `icon.json` plus layer images under `Assets/`, SVG included. `project.yml` adds it as a single resource file and sets `ASSETCATALOG_COMPILER_APPICON_NAME` to its name. actool compiles it into `Assets.car` and sets `CFBundleIconName`.
+- A `linear-gradient` fill takes exactly two colors. Three stops fail the build with "Failed to create a catalog from the Icon Studio document" and nothing more specific.
+
 ## SF Symbols
 
 - `Image(systemName: "circle", variableValue:)` changes nothing in the default or `.color` variable modes. Only `.symbolVariableValueMode(.draw)` responds, drawing the value's share as an arc from twelve o'clock. The remainder is not removed, it is the same color at low opacity, in monochrome, palette, and hierarchical alike. A palette's second color never reaches the remainder, so a two-color ring (done in green, left in red) cannot come from the symbol. Rendered and compared with `ImageRenderer` on macOS 27.

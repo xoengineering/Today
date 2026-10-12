@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- The in-progress circle: a ring, with the half below the bottom-left to top-right split filled. -->
+  <circle cx="512.0" cy="512.0" r="300.0" fill="none" stroke="#FFFFFF" stroke-width="72.0"/>
+  <path d="M 724.1,299.9 A 300.0,300.0 0 0 1 299.9,724.1 Z" fill="#FFFFFF"/>
+</svg>
