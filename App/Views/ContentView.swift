@@ -1,28 +1,32 @@
-import EventKit
 import SwiftUI
 
 struct ContentView: View {
   @Environment(RemindersStore.self) private var store
+  @State private var selection: Screen? = .today
 
   var body: some View {
-    VStack(spacing: 16) {
-      switch store.authorization {
-      case .fullAccess:
-        Text("Reminders access granted.")
-      case .notDetermined:
-        Button("Allow Reminders Access") {
-          Task { await store.requestAccess() }
+    Group {
+      if store.hasAccess {
+        NavigationSplitView {
+          SidebarView(selection: $selection)
+        } detail: {
+          switch selection {
+          case .today, .none: TodayListView()
+          case .backlog: BacklogListView()
+          case .rings: RingsView()
+          }
         }
-      default:
-        Text("Today needs full access to Reminders. Grant it in System Settings, Privacy & Security, Reminders.")
-          .multilineTextAlignment(.center)
+      } else {
+        AccessView()
       }
     }
-    .padding()
-    .frame(minWidth: 320, minHeight: 240)
+    .frame(minWidth: 480, minHeight: 320)
     .task {
-      guard store.authorization == .notDetermined else { return }
-      await store.requestAccess()
+      if store.authorization == .notDetermined {
+        await store.requestAccess()
+      } else {
+        await store.start()
+      }
     }
   }
 }

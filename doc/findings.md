@@ -7,6 +7,10 @@ Platform quirks, SDK gotchas, and tool behaviors met while building Today. Each 
 - There is no public API for Reminders tags, flags, attachments, subtasks, sections, or manual sort order. The full surface is `EKReminder`, `EKCalendarItem`, `EKCalendar`, and `EKEventStore` as listed in `PLAN.md` §1.
 - `saveReminder` and `removeReminder` are prohibited on watchOS. A watch app could only read.
 
+## Swift concurrency
+
+- A closure passed to `EKEventStore.fetchReminders(matching:completion:)` from inside a `@MainActor` method is inferred to be main-actor isolated, and EventKit invokes it on a private dispatch queue. Under Swift 6 the runtime asserts the isolation on entry and the app dies with `EXC_BREAKPOINT` in `_dispatch_assert_queue_fail`. Mark the closure `@Sendable` so it is non-isolated, map the reminders to `Sendable` values inside it, and resume a continuation with those.
+
 ## Signing
 
 - Automatic signing with `-allowProvisioningUpdates` needs a live Xcode account session for the team. When the session is rejected ("The login details for account ... were rejected"), no profile can be fetched and the build fails before compiling. Manual signing with `CODE_SIGN_IDENTITY = Developer ID Application` builds a sandboxed Debug app with no profile, including the `get-task-allow` entitlement Xcode injects for Debug.
