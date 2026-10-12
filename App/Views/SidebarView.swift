@@ -7,7 +7,7 @@ struct SidebarView: View {
 
   var body: some View {
     List(Screen.allCases, selection: $selection) { screen in
-      Label(screen.title, systemImage: screen.symbol)
+      Label(screen.title, systemImage: selection == screen ? screen.selectedSymbol : screen.symbol)
     }
     .navigationTitle("Today")
     #if os(iOS)

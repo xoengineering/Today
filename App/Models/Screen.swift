@@ -21,4 +21,9 @@ enum Screen: String, CaseIterable, Identifiable, Hashable {
     case .rings: "circle.circle"
     }
   }
+
+  /// The filled variant, for the selected row.
+  var selectedSymbol: String {
+    symbol + ".fill"
+  }
 }
