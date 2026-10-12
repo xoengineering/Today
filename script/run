@@ -4,8 +4,8 @@
 #   script/run              macOS
 #   script/run ios          iOS Simulator (iPhone 17 unless named)
 #   script/run ios "iPad Pro 11-inch (M5)"   a named simulator
-#
-# Physical devices need signing, so run those from Xcode (see README).
+#   script/run device       the first paired iPhone or iPad, with the team in Local.xcconfig signing it
+#   script/run device <udid>   a particular one, from `xcrun devicectl list devices`
 
 set -e
 
@@ -66,8 +66,35 @@ case "${1:-macos}" in
     xcrun simctl install "$UDID" "$APP_PATH"
     xcrun simctl launch "$UDID" "$BUNDLE_ID"
     ;;
+  device)
+    script/generate
+
+    UDID="${2:-$(xcrun devicectl list devices --json-output /dev/stdout 2>/dev/null |
+      ruby -rjson -e '
+        devices = JSON.parse($stdin.read)["result"]["devices"]
+        device = devices.find { |d| d.dig("connectionProperties", "pairingState") == "paired" }
+        puts device.dig("hardwareProperties", "udid") if device
+      ')}"
+
+    if [ -z "$UDID" ]; then
+      echo "No paired device. Plug one in, trust this Mac, then: xcrun devicectl list devices" >&2
+      exit 1
+    fi
+
+    xcodebuild -project Today.xcodeproj -scheme Today \
+      -destination "id=$UDID" \
+      -allowProvisioningUpdates -allowProvisioningDeviceRegistration \
+      build
+
+    APP_PATH=$(xcodebuild -project Today.xcodeproj -scheme Today \
+      -destination "id=$UDID" -showBuildSettings build 2>/dev/null |
+      awk -F' = ' '/ BUILT_PRODUCTS_DIR/ {print $2; exit}')/Today.app
+
+    xcrun devicectl device install app --device "$UDID" "$APP_PATH"
+    xcrun devicectl device process launch --device "$UDID" "$BUNDLE_ID"
+    ;;
   *)
-    echo "Usage: script/run [macos|ios] [simulator name]" >&2
+    echo "Usage: script/run [macos|ios|device] [simulator name or device udid]" >&2
     exit 1
     ;;
 esac

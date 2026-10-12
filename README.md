@@ -36,7 +36,7 @@ today:{"days":["2026-10-11"],"order":3,"state":"doing","v":1}
 
 `order` is the position in the Today list, `state` is `todo` or `doing`, and `days` is every day the item sat on the Today list, which is what the rings are drawn from. The text above that line is yours and is never touched.
 
-To run on a physical iPhone or iPad, open `Today.xcodeproj` in Xcode, pick the device as the destination, and Run. The device needs Developer Mode enabled and `DEVELOPMENT_TEAM` set in `Local.xcconfig`.
+- `script/run device` builds, installs, and launches on the first paired iPhone or iPad, or a named one: `script/run device <udid>` with an identifier from `xcrun devicectl list devices`. The device needs Developer Mode enabled and `DEVELOPMENT_TEAM` set in `Local.xcconfig`. The first run registers the device with your team.
 
 ## License
 

@@ -24,9 +24,12 @@ struct CheckCircle: View {
     // Animates the fades, the color, and the turn whenever the state changes.
     .animation(.bouncy(duration: 0.4, extraBounce: 0.2), value: state)
     .contentShape(Circle())
-    // The modified clicks take priority, so a plain click is the only thing left for the tap below.
-    .highPriorityGesture(TapGesture().modifiers(.option).onEnded(retreat))
-    .highPriorityGesture(TapGesture().modifiers(.command).onEnded(retreat))
+    #if os(macOS)
+      // The modified clicks take priority, so a plain click is the only thing left for the tap below.
+      // iOS has no modifier keys. There, the swipe and the context menu step back.
+      .highPriorityGesture(TapGesture().modifiers(.option).onEnded(retreat))
+      .highPriorityGesture(TapGesture().modifiers(.command).onEnded(retreat))
+    #endif
     .onTapGesture(perform: advance)
     .accessibilityAddTraits(.isButton)
     .accessibilityLabel(state.label)
