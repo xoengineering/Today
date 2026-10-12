@@ -46,7 +46,7 @@ struct EmptyBucketView: View {
     case .today:
       finishedEverything
         ? "\(store.completedTodayCount) finished, enjoy the rest of it"
-        : "Add something, or pull something in from the Backlog"
+        : "Add something new or pull something in from the Backlog"
     case .backlog:
       "Nothing is waiting on you"
     }
