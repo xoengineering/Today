@@ -24,6 +24,7 @@ struct ContentView: View {
       }
     }
     .environment(\.textScale, store.settings.textSize.scale)
+    .environment(\.fontTheme, store.settings.fontTheme)
     #if os(macOS)
       // The sidebar plus 360 for content. The content has no minimum of its own, so nothing is ever clipped.
       .frame(minWidth: 560, minHeight: 320)

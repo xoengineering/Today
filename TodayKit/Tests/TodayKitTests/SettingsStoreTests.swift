@@ -36,6 +36,8 @@ import TodayKit
       #expect(loaded.endOfDay == EndOfDay(hour: 2))
       #expect(loaded.todayListIdentifier == "t")
       #expect(loaded.dateFormat == .system)
+      #expect(loaded.textSize == .medium)
+      #expect(loaded.fontTheme == .sans)
     }
   }
 

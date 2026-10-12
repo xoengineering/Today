@@ -14,9 +14,22 @@ extension TextSize {
   }
 }
 
-/// The current text scale, set once at the window root from the text size setting.
+extension FontTheme {
+  /// The system typeface design behind each theme.
+  var design: Font.Design {
+    switch self {
+    case .mono: .monospaced
+    case .rounded: .rounded
+    case .sans: .default
+    case .serif: .serif
+    }
+  }
+}
+
+/// The current text scale and typeface, set once at the window root from the settings.
 ///
 /// macOS has no Dynamic Type, so the app scales its own fonts and metrics by this number.
 extension EnvironmentValues {
   @Entry var textScale: Double = 1
+  @Entry var fontTheme: FontTheme = .sans
 }

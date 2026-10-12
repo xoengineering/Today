@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Add a typeface setting: Sans, Rounded, Serif, or Mono, picked from four tiles that each show their own face.
 - Text size is a slider in Settings. The sidebar is a fixed width, toggle only.
 - Add a text size setting with five steps, in Settings and as Bigger Text (⌘+) and Smaller Text (⌘-) in the View menu. Rows, circles, and rings scale with it.
 - Titles show as wrapping text and become a field on click, so rows grow with long titles and larger text.

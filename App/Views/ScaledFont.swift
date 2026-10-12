@@ -5,11 +5,14 @@ import SwiftUI
 /// The base sizes are the platform's own for each style, so at scale 1 this is exactly `.font(style)`.
 struct ScaledFont: ViewModifier {
   @Environment(\.textScale) private var textScale
+  @Environment(\.fontTheme) private var fontTheme
   let style: Font.TextStyle
   let weight: Font.Weight?
 
   func body(content: Content) -> some View {
-    content.font(.system(size: Self.baseSize(of: style) * textScale, weight: weight ?? Self.baseWeight(of: style)))
+    content.font(
+      .system(
+        size: Self.baseSize(of: style) * textScale, weight: weight ?? Self.baseWeight(of: style), design: fontTheme.design))
   }
 
   #if os(macOS)
