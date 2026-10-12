@@ -15,8 +15,9 @@ struct TodayListView: View {
       }
       AddItemField(bucket: .today)
     }
-    // The table keeps row heights it measured earlier. A new identity makes it measure every row again.
-    .id(store.settings.textSize.rawValue + store.settings.fontTheme.rawValue)
+    // The table keeps row heights it measured earlier. A new identity makes it measure every row again:
+    // when the text settings change, and once the first load fills a table that was built empty.
+    .id(store.listIdentity)
     .overlay {
       if store.todayItems.isEmpty {
         EmptyBucketView(bucket: .today)

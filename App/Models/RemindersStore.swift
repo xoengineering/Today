@@ -53,6 +53,11 @@ final class RemindersStore {
 
   var allItems: [TodayItem] { todayItems + backlogItems }
 
+  /// Changes when a list's rows must be measured again: text settings, and the first load after launch.
+  var listIdentity: String {
+    "\(settings.textSize.rawValue)-\(settings.fontTheme.rawValue)-\(reloadCount == 0 ? "empty" : "loaded")"
+  }
+
   // MARK: Lifecycle
 
   func requestAccess() async {
