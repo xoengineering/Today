@@ -60,11 +60,15 @@ struct ItemRow: View {
       title = newTitle
     }
     .contextMenu {
-      stateButtons
-      Divider()
-      moveButton
-      Divider()
-      Button("Delete", systemImage: "xmark", role: .destructive) { store.delete(item) }
+      Group {
+        stateButtons
+        Divider()
+        moveButton
+        Divider()
+        Button("Delete", systemImage: "xmark", role: .destructive) { store.delete(item) }
+      }
+      // Menus drop the symbols unless asked for both.
+      .labelStyle(.titleAndIcon)
     }
     // Swipe actions are icon only. The titles still name them for accessibility.
     // Backward moves are on the leading edge, forward moves on the trailing edge. The first button sits at the edge.

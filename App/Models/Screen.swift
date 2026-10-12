@@ -1,3 +1,5 @@
+import SwiftUI
+
 /// The sidebar entries: two buckets and the rings.
 enum Screen: String, CaseIterable, Identifiable, Hashable {
   case today
@@ -25,5 +27,14 @@ enum Screen: String, CaseIterable, Identifiable, Hashable {
   /// The filled variant, for the selected row.
   var selectedSymbol: String {
     symbol + ".fill"
+  }
+
+  /// ⌘1, ⌘2, ⌘3, in sidebar order.
+  var shortcut: KeyEquivalent {
+    switch self {
+    case .today: "1"
+    case .backlog: "2"
+    case .rings: "3"
+    }
   }
 }
