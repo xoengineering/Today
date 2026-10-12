@@ -20,7 +20,9 @@ settings:
     SWIFT_VERSION: "6.0"
     SWIFT_STRICT_CONCURRENCY: complete
     # The app group the app and widget share settings through.
-    # iOS requires the group. prefix. macOS outside the App Store uses the team prefix, which needs no provisioning profile.
+    # iOS requires the group. prefix, backed by the App Groups capability on the App ID.
+    # macOS uses the team prefix, which the sandbox honors with no provisioning profile at all.
+    # A group. prefixed group on macOS needs a profile that carries it, and without one every write is dropped.
     APP_GROUP_IDENTIFIER[sdk=iphone*]: group.engineering.xo.Today
     APP_GROUP_IDENTIFIER[sdk=macosx*]: $(TeamIdentifierPrefix)engineering.xo.Today
 targets:
@@ -31,6 +33,12 @@ targets:
     dependencies:
       - package: TodayKit
       - target: TodayWidgets
+    attributes:
+      SystemCapabilities:
+        com.apple.ApplicationGroups.iOS:
+          enabled: 1
+        com.apple.ApplicationGroups.Mac:
+          enabled: 1
     settings:
       base:
         CODE_SIGN_ENTITLEMENTS: App/Today.entitlements
@@ -55,6 +63,12 @@ targets:
       - package: TodayKit
       - sdk: WidgetKit.framework
       - sdk: SwiftUI.framework
+    attributes:
+      SystemCapabilities:
+        com.apple.ApplicationGroups.iOS:
+          enabled: 1
+        com.apple.ApplicationGroups.Mac:
+          enabled: 1
     settings:
       base:
         CODE_SIGN_ENTITLEMENTS: Widgets/TodayWidgets.entitlements

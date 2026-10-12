@@ -152,9 +152,9 @@ Nothing in this app needs an API key. There is no backend, no analytics, no iClo
 
 Why this is safe: XcodeGen bakes `DEVELOPMENT_TEAM` into `project.pbxproj` at generate time. The project is gitignored, so the baked value never reaches a commit.
 
-The app group identifier differs per platform, through the `APP_GROUP_IDENTIFIER` build setting in `project.yml`. iOS uses `group.engineering.xo.Today`, which a provisioning profile must back. macOS uses `$(TeamIdentifierPrefix)engineering.xo.Today`, which Developer ID signing honors with no profile at all. Both entitlements files and both Info.plists read the setting, and the app reads the resolved value from its Info.plist at runtime, so the string is never hardcoded in Swift.
+The app group identifier differs per platform, through the `APP_GROUP_IDENTIFIER` build setting in `project.yml`. iOS uses `group.engineering.xo.Today`, which the App Groups capability on the App ID backs. macOS uses `$(TeamIdentifierPrefix)engineering.xo.Today`, the form macOS app groups have always taken, which the sandbox honors with no profile at all. Both entitlements files and both Info.plists read the setting, and the app reads the resolved value from its Info.plist at runtime, so the string is never hardcoded in Swift.
 
-For App Store distribution on macOS the group must become `group.`-prefixed and profile-backed. That is the one-time human step in Xcode's Signing & Capabilities tab, for both the iOS and macOS rows. `-allowProvisioningUpdates` does not register capabilities headlessly. If app group writes fail with `EPERM` afterward, delete the stale wildcard profile from `~/Library/Developer/Xcode/UserData/Provisioning Profiles/` and rebuild. Picking a team in Xcode writes it into the pbxproj, so run `script/generate` again after.
+The App Groups capability is registered on both App IDs. `project.yml` carries the `SystemCapabilities` target attributes so a regenerated project keeps asking Xcode for profiles with it. Picking a team in Xcode writes it into the pbxproj, so run `script/generate` again after any Signing & Capabilities visit.
 
 ## 7. Spikes before committing to the design
 
