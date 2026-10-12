@@ -6,6 +6,8 @@ Platform quirks, SDK gotchas, and tool behaviors met while building Today. Each 
 
 - There is no public API for Reminders tags, flags, attachments, subtasks, sections, or manual sort order. The full surface is `EKReminder`, `EKCalendarItem`, `EKCalendar`, and `EKEventStore` as listed in `PLAN.md` §1.
 - `saveReminder` and `removeReminder` are prohibited on watchOS. A watch app could only read.
+- A `#hashtag` written into a reminder's title through EventKit stays literal text. The Reminders app does not turn it into a tag. Tags are only ever created inside the Reminders app itself.
+- The notes footer survives a round trip through the Reminders app: editing the footer line by hand in Reminders changes what Today reads, and the text above it is untouched.
 
 ## Simulator
 
