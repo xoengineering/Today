@@ -23,6 +23,7 @@ For macOS, iOS, and iPadOS. It is a view on top of Apple Reminders. Your reminde
 - `script/build [macos|ios]` builds the app.
 - `script/lint` and `script/format` run swift format and SwiftLint.
 - `script/run` builds and launches the macOS app.
+- `script/index` teaches sourcekit-lsp the Xcode build settings, so editors other than Xcode resolve `TodayKit` and `Testing` in app and test files. Restart the editor's language server after it runs.
 - `script/run ios` builds, installs, and launches in the iOS Simulator. Takes an optional simulator name: `script/run ios "iPad Pro 11-inch (M5)"`. Only iOS 27 simulators are eligible. Grant the simulator app Reminders access without the prompt with `xcrun simctl privacy booted grant reminders engineering.xo.Today`.
 
 ## How it works

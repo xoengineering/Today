@@ -1,5 +1,8 @@
 .DS_Store
 /Local.xcconfig
+# xcode-build-server output for sourcekit-lsp in editors. Machine-specific paths.
+/buildServer.json
+/.compile
 /*.xcodeproj
 xcuserdata/
 DerivedData/

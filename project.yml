@@ -25,6 +25,24 @@ settings:
     # A group. prefixed group on macOS needs a profile that carries it, and without one every write is dropped.
     APP_GROUP_IDENTIFIER[sdk=iphone*]: group.engineering.xo.Today
     APP_GROUP_IDENTIFIER[sdk=macosx*]: $(TeamIdentifierPrefix)engineering.xo.Today
+# The Today scheme tests the package, so `xcodebuild test` compiles TodayKitTests and editors learn its build settings.
+schemes:
+  Today:
+    build:
+      targets:
+        Today: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - package: TodayKit/TodayKitTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
 targets:
   Today:
     type: application

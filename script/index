@@ -1,0 +1,48 @@
+#!/bin/sh
+# script/index: teach sourcekit-lsp the Xcode build settings, for editors other than Xcode.
+#
+# Writes buildServer.json and .compile (both gitignored) from a clean build of the app and the package tests,
+# then adds the one file no Xcode build compiles: the package manifest.
+# Run it after script/setup, and again whenever targets or files are added. Then restart the editor's language server.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if ! command -v xcode-build-server >/dev/null 2>&1; then
+  echo "Installing xcode-build-server..."
+  brew install xcode-build-server
+fi
+
+script/generate
+
+xcodebuild -project Today.xcodeproj -scheme Today -destination "platform=macOS" clean >/dev/null
+xcodebuild -project Today.xcodeproj -scheme Today -destination "platform=macOS" build | xcode-build-server parse -a
+xcodebuild -project Today.xcodeproj -scheme Today -destination "platform=macOS" test | xcode-build-server parse -a
+
+# Package.swift is compiled by SwiftPM against PackageDescription, never by xcodebuild, so its entry is written by hand.
+ruby -rjson -e '
+  toolchain = `xcrun --find swiftc`.strip.sub(%r{/usr/bin/swiftc$}, "")
+  sdk = `xcrun --sdk macosx --show-sdk-path`.strip
+  manifest = File.expand_path("TodayKit/Package.swift")
+  tools_version = File.read(manifest)[/swift-tools-version:\s*([\d.]+)/, 1]
+  entries = JSON.parse(File.read(".compile")).reject { |entry| entry["files"] == [manifest] }
+  entries << {
+    "directory" => Dir.pwd,
+    "command" => [
+      "#{toolchain}/usr/bin/swiftc",
+      "-module-name", "Package",
+      "-swift-version", "6",
+      "-package-description-version", "#{tools_version}.0",
+      "-sdk", sdk,
+      "-I", "#{toolchain}/usr/lib/swift/pm/ManifestAPI",
+      manifest,
+    ].join(" "),
+    "module_name" => "Package",
+    "files" => [manifest],
+    "fileLists" => [],
+  }
+  File.write(".compile", JSON.pretty_generate(entries))
+'
+
+echo "Indexed. Restart the language server in your editor."

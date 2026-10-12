@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Add `script/index`, which hands Xcode's build settings to sourcekit-lsp through xcode-build-server so editors other than Xcode resolve `TodayKit`, `Testing`, and `PackageDescription`. The `Today` scheme now tests the package.
 - The empty Today and Backlog states drop their trailing periods.
 - Settings on macOS fits its content with no scrolling, no longer hands keyboard focus to the end-of-day stepper on open, and explains each section in one line.
 - Add Settings: the end-of-day time and the two Reminders lists. A Settings window on macOS, a sheet on iOS.
