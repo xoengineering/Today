@@ -48,6 +48,9 @@ struct AddItemField: View {
     .onChange(of: navigation.addItemRequest) {
       isFocused = true
     }
+    .onChange(of: navigation.dismissFocusRequest) {
+      isFocused = false
+    }
   }
 
   private var prompt: String {
@@ -56,7 +59,12 @@ struct AddItemField: View {
 
   private func add() {
     let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmed.isEmpty else { return }
+    // Return on an empty field means "never mind": the field lets go, and on iOS the keyboard goes with it.
+    guard !trimmed.isEmpty else {
+      title = ""
+      isFocused = false
+      return
+    }
     store.add(title: trimmed, to: bucket)
     title = ""
     isFocused = true

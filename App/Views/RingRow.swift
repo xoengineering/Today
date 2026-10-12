@@ -55,8 +55,8 @@ struct RingRow: View {
   }
 
   private var label: Text {
-    let date = Text(store.settings.dateFormat.format(ring.day))
-    guard let relation else { return date }
-    return date + Text(" (\(relation))").foregroundStyle(.secondary)
+    let date = store.settings.dateFormat.format(ring.day)
+    guard let relation else { return Text(date) }
+    return Text("\(date) \(Text("(\(relation))").foregroundStyle(.secondary))")
   }
 }

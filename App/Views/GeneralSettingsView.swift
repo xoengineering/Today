@@ -9,7 +9,9 @@ struct GeneralSettingsView: View {
   var body: some View {
     Form {
       Section {
-        DatePicker("End of day", selection: endOfDayBinding, displayedComponents: .hourAndMinute)
+        DatePicker("Reset time", selection: endOfDayBinding, displayedComponents: .hourAndMinute)
+      } header: {
+        Text("End of day")
       } footer: {
         Text("Items in the Today list move to Backlog at this time")
       }

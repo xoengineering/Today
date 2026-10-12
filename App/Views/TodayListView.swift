@@ -4,6 +4,7 @@ import TodayKit
 /// The Today bucket, in the user's order.
 struct TodayListView: View {
   @Environment(RemindersStore.self) private var store
+  @Environment(NavigationState.self) private var navigation
 
   var body: some View {
     List {
@@ -25,6 +26,9 @@ struct TodayListView: View {
       }
     }
     .listStyle(.plain)
+    // A tap on the list's empty area drops focus. Taps on rows are claimed by the rows first.
+    .onTapGesture { navigation.requestDismissFocus() }
+    .scrollDismissesKeyboard(.immediately)
     .navigationTitle("Today")
     .toolbarTitleDisplayMode(.inline)
   }

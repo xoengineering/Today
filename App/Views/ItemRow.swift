@@ -6,6 +6,7 @@ import TodayKit
 /// The title shows as text, which wraps and sizes its row. A click swaps in a field. Return or leaving commits.
 struct ItemRow: View {
   @Environment(RemindersStore.self) private var store
+  @Environment(NavigationState.self) private var navigation
   let item: TodayItem
   @State private var title: String
   @State private var isEditing = false
@@ -65,6 +66,9 @@ struct ItemRow: View {
     .listRowSeparator(.hidden)
     .onChange(of: item.title) { _, newTitle in
       title = newTitle
+    }
+    .onChange(of: navigation.dismissFocusRequest) {
+      if isEditing { commit() }
     }
     .contextMenu {
       Group {

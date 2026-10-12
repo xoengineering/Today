@@ -4,6 +4,8 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- A tap on a list's empty area, Return on an empty add field, or a scroll drops field focus, which on iOS dismisses the keyboard.
+- The end-of-day setting has its own header, with the row named Reset time.
 - Rings rows are laid out like item rows, with a symbol for the day in place of the drawn ring: gray dotted for nothing planned, red dashed for nothing done, a green arc for the share done, and a green checked disc for everything done.
 - Launching with `-fakeRings` shows one synthetic day per tenth on the Rings screen, for looking at the symbols.
 - Titles stay in the title bar on iOS, and lists are plain rows on the background rather than cards. Rings rows have no separators.

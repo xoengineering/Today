@@ -4,6 +4,7 @@ import TodayKit
 /// Everything that is not today.
 struct BacklogListView: View {
   @Environment(RemindersStore.self) private var store
+  @Environment(NavigationState.self) private var navigation
 
   var body: some View {
     List {
@@ -20,6 +21,8 @@ struct BacklogListView: View {
       }
     }
     .listStyle(.plain)
+    .onTapGesture { navigation.requestDismissFocus() }
+    .scrollDismissesKeyboard(.immediately)
     .navigationTitle("Backlog")
     .toolbarTitleDisplayMode(.inline)
   }

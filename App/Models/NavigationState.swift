@@ -11,4 +11,11 @@ final class NavigationState {
   func requestAddItem() {
     addItemRequest += 1
   }
+
+  /// Bumped by a tap on a list's empty area, so any focused field lets go and the keyboard goes with it.
+  var dismissFocusRequest = 0
+
+  func requestDismissFocus() {
+    dismissFocusRequest += 1
+  }
 }
