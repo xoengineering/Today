@@ -18,11 +18,10 @@ struct ItemRow: View {
 
   var body: some View {
     HStack(alignment: .top, spacing: 12) {
-      CheckCircle(state: item.checkState) {
-        withAnimation {
-          store.set(item, to: item.checkState.next)
-        }
-      }
+      CheckCircle(
+        state: item.checkState,
+        advance: { store.set(item, to: item.checkState.next) },
+        retreat: { store.set(item, to: item.checkState.previous) })
       if isEditing {
         // A field in a table row never reports a wrapped height. The invisible text behind it does,
         // so the row grows with what is typed and the field fills the room.
@@ -61,6 +60,8 @@ struct ItemRow: View {
       title = newTitle
     }
     .contextMenu {
+      stateButtons
+      Divider()
       moveButton
       Divider()
       Button("Delete", systemImage: "xmark", role: .destructive) { store.delete(item) }
@@ -74,6 +75,18 @@ struct ItemRow: View {
     .swipeActions(edge: .trailing) {
       Button("Delete", systemImage: "xmark", role: .destructive) { store.delete(item) }
         .labelStyle(.iconOnly)
+      stateButtons
+        .labelStyle(.iconOnly)
+    }
+  }
+
+  /// The two states the item is not in.
+  @ViewBuilder private var stateButtons: some View {
+    ForEach(CheckState.allCases.filter { $0 != item.checkState }, id: \.self) { state in
+      // Swipe actions fill their symbols, which turns the empty circle into a disc. The dashed circle has
+      // no filled form to fall into, and reads as not started.
+      let symbol = state == .todo ? "circle.dashed" : state.symbol
+      Button("Mark as \(state.label)", systemImage: symbol) { store.set(item, to: state) }
     }
   }
 

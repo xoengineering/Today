@@ -4,12 +4,37 @@ public enum CheckState: Hashable, Sendable, CaseIterable {
   case doing
   case done
 
-  /// The state a tap moves to, round and round.
+  /// The state a click moves to, round and round.
   public var next: Self {
     switch self {
     case .todo: .doing
     case .doing: .done
     case .done: .todo
+    }
+  }
+
+  /// The state an option-click moves to, the other way round.
+  public var previous: Self {
+    switch self {
+    case .todo: .done
+    case .doing: .todo
+    case .done: .doing
+    }
+  }
+
+  public var label: String {
+    switch self {
+    case .todo: "To Do"
+    case .doing: "In Progress"
+    case .done: "Done"
+    }
+  }
+
+  public var symbol: String {
+    switch self {
+    case .todo: "circle"
+    case .doing: "circle.lefthalf.filled"
+    case .done: "checkmark.circle.fill"
     }
   }
 }

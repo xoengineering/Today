@@ -181,6 +181,7 @@ Spikes are throwaway branches. Anything worth keeping is pasted into `doc/findin
 
 ## Open
 
+- Version 1.1, after 1.0 is through review: a "Show in Reminders" context menu item opening `x-apple-reminderkit://REMCDReminder/<calendarItemIdentifier>`. The scheme is what Notes and Shortcuts use but is undocumented, so nothing else may depend on it.
 - The add row is the last row of each list, so a list taller than the window hides it below the fold. ⌘N focuses it. Options on the table: pin it under the list as a compose bar, add a `+` toolbar button that scrolls to it, or switch between the two by list length.
 
 ## Decisions

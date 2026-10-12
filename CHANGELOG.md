@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Any state is one step away: ⌥-click or ⌘-click a circle to step back, and the context menu and trailing swipe offer the two states an item is not in.
 - The selected sidebar row shows its filled symbol.
 - Rings rows keep the date on one line and drop the finished count when there isn't room. "(Today)" and "(Yesterday)" are part of the date string.
 - Lists re-measure their rows when the text size or typeface changes and after the first load at launch, so rows never keep a stale height.
