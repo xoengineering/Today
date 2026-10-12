@@ -13,7 +13,8 @@ concurrency:
 jobs:
   cibuild:
     name: Lint, test, build
-    runs-on: macos-26
+    # The macos-26 image stops at Xcode 26.6 and Swift 6.3. The app needs Xcode 27, which only this preview image has.
+    runs-on: xcode-27
 
     steps:
       - uses: actions/checkout@v4
