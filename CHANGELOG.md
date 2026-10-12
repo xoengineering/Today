@@ -4,6 +4,8 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Add a demo mode for screenshots, `-demo`, with canned items and two weeks of ring history, plus launch arguments for the first screen and the Settings tab. `script/screenshots` captures every screen on macOS, iPhone, and iPad at the store's sizes.
+- Add the privacy policy, `doc/PRIVACY.md`.
 - Sidebar symbols on macOS take the text color like the other platforms.
 - The plan and the development notes live in `doc/`, with the README pointing at them.
 - Add the app icon: the in-progress circle in glass over a pastel sunset, peach to lavender with soft patches of pink and rose, with a dusk version for dark mode. It is an Icon Composer document, `App/Today.icon`, and `script/icon-sky` draws its sky layer.

@@ -16,7 +16,7 @@ struct RingsView: View {
     .task(id: store.reloadCount) {
       let today = store.today
       // Launched with -fakeRings, the screen shows one day per tenth, for looking at the symbols. Nothing is stored.
-      if CommandLine.arguments.contains("-fakeRings") {
+      if LaunchArguments.fakesRings {
         rings = (0...11).map { offset in
           let day = today.advanced(by: -offset)
           return offset == 11

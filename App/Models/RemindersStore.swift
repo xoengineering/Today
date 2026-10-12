@@ -39,10 +39,22 @@ final class RemindersStore {
   private var changeObserver: (any NSObjectProtocol)?
   private let logger = Logger(subsystem: "engineering.xo.Today", category: "RemindersStore")
 
+  /// Canned items when launched with `-demo`, kept in memory in place of Reminders, and nil otherwise.
+  private var demoItems: [TodayItem]?
+
   init(settingsStore: SettingsStore = AppGroup.settingsStore) {
-    self.settingsStore = settingsStore
-    self.settings = settingsStore.load()
-    self.authorization = EKEventStore.authorizationStatus(for: .reminder)
+    if DemoData.isEnabled {
+      // Default settings in a throwaway suite, so screenshots look the same everywhere and nothing real is touched.
+      self.settingsStore = DemoData.settingsStore
+      self.settings = AppSettings()
+      self.authorization = .fullAccess
+      let today = LogicalDay(containing: .now, endOfDay: settings.endOfDay)
+      self.demoItems = DemoData.items(today: today, endOfDay: settings.endOfDay)
+    } else {
+      self.settingsStore = settingsStore
+      self.settings = settingsStore.load()
+      self.authorization = EKEventStore.authorizationStatus(for: .reminder)
+    }
   }
 
   var hasAccess: Bool { authorization == .fullAccess }
@@ -88,6 +100,10 @@ final class RemindersStore {
   /// Safe to call more than once.
   func start() async {
     guard hasAccess else { return }
+    if demoItems != nil {
+      await reload()
+      return
+    }
     resolveLists()
     await reload()
     guard changeObserver == nil else { return }
@@ -161,6 +177,10 @@ final class RemindersStore {
   // MARK: Reading
 
   func reload() async {
+    if let demoItems {
+      show(demoItems)
+      return
+    }
     guard hasAccess, let todayList, let backlogList else { return }
     let fetched = await fetchItems(in: [todayList, backlogList], todayListIdentifier: todayList.calendarIdentifier)
     // Unfinished items go back to the Backlog once per logical day, the first time this device loads in that day.
@@ -175,19 +195,25 @@ final class RemindersStore {
     if !changed.isEmpty {
       save(changed)
     }
-    todayItems = TodayOrdering.sorted(rolled.filter { $0.bucket == .today && !$0.isCompleted })
-    backlogItems = rolled.filter { $0.bucket == .backlog && !$0.isCompleted }
-      .sorted { ($0.creationDate ?? .distantPast) < ($1.creationDate ?? .distantPast) }
-    completedTodayCount = DayRing.compute(day: today, items: rolled, endOfDay: settings.endOfDay).completed
-    reloadCount += 1
+    show(rolled)
     WidgetCenter.shared.reloadAllTimelines()
     logger.info(
       "Reloaded: \(fetched.count) reminders, \(changed.count) rolled over, today=\(self.todayItems.count) backlog=\(self.backlogItems.count)"
     )
   }
 
+  /// Splits the items into the two lists as the screens want them.
+  private func show(_ items: [TodayItem]) {
+    todayItems = TodayOrdering.sorted(items.filter { $0.bucket == .today && !$0.isCompleted })
+    backlogItems = items.filter { $0.bucket == .backlog && !$0.isCompleted }
+      .sorted { ($0.creationDate ?? .distantPast) < ($1.creationDate ?? .distantPast) }
+    completedTodayCount = DayRing.compute(day: today, items: items, endOfDay: settings.endOfDay).completed
+    reloadCount += 1
+  }
+
   /// Every reminder in the two lists, completed ones included, for the ring history.
   func fetchHistory() async -> [TodayItem] {
+    if let demoItems { return demoItems }
     guard let todayList, let backlogList else { return [] }
     return await fetchItems(in: [todayList, backlogList], todayListIdentifier: todayList.calendarIdentifier)
   }
@@ -208,7 +234,17 @@ final class RemindersStore {
 
   func add(title: String, to bucket: Bucket) {
     let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmed.isEmpty, let todayList, let backlogList else { return }
+    guard !trimmed.isEmpty else { return }
+    if demoItems != nil {
+      var item = TodayItem(id: UUID().uuidString, title: trimmed, bucket: bucket, creationDate: .now)
+      if bucket == .today {
+        item = item.movedToToday(on: today, order: todayItems.count)
+      }
+      demoItems?.append(item)
+      show(demoItems ?? [])
+      return
+    }
+    guard let todayList, let backlogList else { return }
     let reminder = EKReminder(eventStore: eventStore)
     reminder.title = trimmed
     reminder.calendar = bucket == .today ? todayList : backlogList
@@ -251,6 +287,11 @@ final class RemindersStore {
   }
 
   func delete(_ item: TodayItem) {
+    if demoItems != nil {
+      demoItems?.removeAll { $0.id == item.id }
+      show(demoItems ?? [])
+      return
+    }
     guard let reminder = eventStore.calendarItem(withIdentifier: item.id) as? EKReminder else { return }
     do {
       try eventStore.remove(reminder, commit: true)
@@ -260,6 +301,15 @@ final class RemindersStore {
   }
 
   private func save(_ items: [TodayItem]) {
+    if demoItems != nil {
+      for item in items {
+        if let index = demoItems?.firstIndex(where: { $0.id == item.id }) {
+          demoItems?[index] = item
+        }
+      }
+      show(demoItems ?? [])
+      return
+    }
     guard let todayList, let backlogList else { return }
     for item in items {
       guard let reminder = eventStore.calendarItem(withIdentifier: item.id) as? EKReminder else { continue }

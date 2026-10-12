@@ -2,12 +2,14 @@ import SwiftUI
 
 /// The Settings window: General and Appearance tabs.
 struct SettingsView: View {
+  @State private var selection = LaunchArguments.settingsTab ?? .general
+
   var body: some View {
-    TabView {
-      Tab("General", systemImage: "gearshape") {
+    TabView(selection: $selection) {
+      Tab("General", systemImage: "gearshape", value: SettingsTab.general) {
         GeneralSettingsView()
       }
-      Tab("Appearance", systemImage: "textformat") {
+      Tab("Appearance", systemImage: "textformat", value: SettingsTab.appearance) {
         AppearanceSettingsView()
       }
     }

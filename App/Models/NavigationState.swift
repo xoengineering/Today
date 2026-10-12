@@ -4,7 +4,8 @@ import Observation
 @MainActor
 @Observable
 final class NavigationState {
-  var screen: Screen? = .today
+  /// Starts on Today, or on the screen named by a `-screen` launch argument, which the screenshot script uses.
+  var screen: Screen? = LaunchArguments.screen ?? .today
   /// Bumped by the New Item command, so the visible add row focuses itself.
   var addItemRequest = 0
 

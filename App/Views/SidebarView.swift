@@ -3,7 +3,7 @@ import SwiftUI
 /// The three screens, with no counts and no badges.
 struct SidebarView: View {
   @Binding var selection: Screen?
-  @State private var isShowingSettings = false
+  @State private var isShowingSettings = LaunchArguments.settingsTab != nil
 
   var body: some View {
     List(Screen.allCases, selection: $selection) { screen in
