@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- The plan and the development notes live in `doc/`, with the README pointing at them.
 - Add the app icon: the in-progress circle in glass over a pastel sunset, peach to lavender with soft patches of pink and rose, with a dusk version for dark mode. It is an Icon Composer document, `App/Today.icon`, and `script/icon-sky` draws its sky layer.
 - On macOS the app keeps running with its window closed. ⌘0 or Window, Today brings the window back, and ⌘N brings it back on Today with the cursor in the add field, from anywhere.
 - Lists re-measure their rows whenever rows are added or removed, so items arriving from another device land at full height on macOS. The add field keeps focus across that rebuild.
