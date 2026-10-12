@@ -17,8 +17,9 @@ fi
 script/generate
 
 xcodebuild -project Today.xcodeproj -scheme Today -destination "platform=macOS" clean >/dev/null
-xcodebuild -project Today.xcodeproj -scheme Today -destination "platform=macOS" build | xcode-build-server parse -a
-xcodebuild -project Today.xcodeproj -scheme Today -destination "platform=macOS" test | xcode-build-server parse -a
+# stderr is dropped: the test runner prints an internal Xcode assertion there on every run, addressed to Apple.
+xcodebuild -project Today.xcodeproj -scheme Today -destination "platform=macOS" build 2>/dev/null | xcode-build-server parse -a
+xcodebuild -project Today.xcodeproj -scheme Today -destination "platform=macOS" test 2>/dev/null | xcode-build-server parse -a
 
 # Package.swift is compiled by SwiftPM against PackageDescription, never by xcodebuild, so its entry is written by hand.
 ruby -rjson -e '
