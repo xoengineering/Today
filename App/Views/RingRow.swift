@@ -6,14 +6,13 @@ import TodayKit
 /// The finished count is shown only while everything fits on one line. The date never wraps for its sake.
 struct RingRow: View {
   @Environment(RemindersStore.self) private var store
-  @Environment(\.textScale) private var textScale
   let ring: DayRing
   let relation: String?
 
   var body: some View {
     HStack(spacing: 12) {
       RingView(ring: ring)
-        .frame(width: 28 * textScale, height: 28 * textScale)
+        .frame(width: 28 * store.settings.textSize.ringScale, height: 28 * store.settings.textSize.ringScale)
       ViewThatFits(in: .horizontal) {
         HStack(spacing: 12) {
           labels.fixedSize()

@@ -13,6 +13,18 @@ extension TextSize {
     case .small: 0.9
     }
   }
+
+  /// How much the day rings grow with the text, gentler than the text itself so a big setting doesn't make them huge.
+  var ringScale: Double {
+    switch self {
+    case .extraLarge: 1.05
+    case .giant: 1.1
+    case .huge: 1.075
+    case .large: 1.025
+    case .medium: 1
+    case .small: 0.8
+    }
+  }
 }
 
 extension FontTheme {
