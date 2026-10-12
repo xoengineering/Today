@@ -10,7 +10,8 @@ struct ContentView: View {
       if store.hasAccess {
         NavigationSplitView {
           SidebarView(selection: $navigation.screen)
-            .navigationSplitViewColumnWidth(min: 160, ideal: 200, max: 280)
+            // One fixed width. Three entries don't need a resizable column, only a toggle.
+            .navigationSplitViewColumnWidth(200)
         } detail: {
           switch navigation.screen {
           case .today, .none: TodayListView()
@@ -24,8 +25,8 @@ struct ContentView: View {
     }
     .environment(\.textScale, store.settings.textSize.scale)
     #if os(macOS)
-      // The sidebar's widest plus 320 for content. The content has no minimum of its own, so nothing is ever clipped.
-      .frame(minWidth: 600, minHeight: 320)
+      // The sidebar plus 360 for content. The content has no minimum of its own, so nothing is ever clipped.
+      .frame(minWidth: 560, minHeight: 320)
     #endif
     .task {
       if store.authorization == .notDetermined {

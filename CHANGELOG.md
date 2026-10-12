@@ -4,6 +4,7 @@ All notable changes to Today are documented here.
 
 ## Unreleased
 
+- Text size is a slider in Settings. The sidebar is a fixed width, toggle only.
 - Add a text size setting with five steps, in Settings and as Bigger Text (⌘+) and Smaller Text (⌘-) in the View menu. Rows, circles, and rings scale with it.
 - Titles show as wrapping text and become a field on click, so rows grow with long titles and larger text.
 - The window is at least 600 by 320, and the content takes whatever width the sidebar leaves, so nothing is pushed off the window's edges.
