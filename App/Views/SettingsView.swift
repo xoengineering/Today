@@ -11,7 +11,7 @@ struct SettingsView: View {
       Section {
         DatePicker("End of day", selection: endOfDayBinding, displayedComponents: .hourAndMinute)
       } footer: {
-        Text("Unfinished Today items return to the Backlog at this time. Night owls pick something like 4:00 AM.")
+        Text("Items in the Today list move to Backlog at this time")
       }
       Section {
         Picker("Today list", selection: todayListBinding) {
@@ -24,11 +24,18 @@ struct SettingsView: View {
             Text(list.title).tag(list.calendarIdentifier)
           }
         }
+      } header: {
+        Text("Reminders integration")
       } footer: {
-        Text("Two lists in Reminders. Today reads and writes nothing else.")
+        Text("This app only uses these two Reminders lists")
       }
     }
     .formStyle(.grouped)
+    // The window fits the form. Nothing here is long enough to scroll.
+    .scrollDisabled(true)
+    .fixedSize(horizontal: false, vertical: true)
+    // The window would otherwise hand focus to the stepper. Tab still reaches it.
+    .resignInitialFocus()
     .navigationTitle("Settings")
   }
 
