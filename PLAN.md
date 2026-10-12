@@ -138,11 +138,13 @@ Today/
 
 ## 6. Open source: what lives outside the repo
 
-Nothing in this app needs an API key. There is no backend, no analytics, no iCloud container. The only org-specific value is the signing team, kept in `Local.xcconfig` (gitignored). Bundle identifiers and the app group are public strings and live in `project.yml`.
+Nothing in this app needs an API key. There is no backend, no analytics, no iCloud container. The only org-specific values are the signing team and style, kept in `Local.xcconfig` (gitignored). Bundle identifiers and the app group are public strings and live in `project.yml`.
 
-| Key                | Value                      | Where it's used                             |
-| ------------------ | -------------------------- | ------------------------------------------- |
-| `DEVELOPMENT_TEAM` | the xo.engineering team ID | Code signing for the app and widget targets |
+| Key                  | Value                                    | Where it's used                                               |
+| -------------------- | ---------------------------------------- | ------------------------------------------------------------- |
+| `DEVELOPMENT_TEAM`   | the xo.engineering team ID               | Code signing for the app and widget targets, app group prefix |
+| `CODE_SIGN_STYLE`    | `Automatic` or `Manual`                  | Manual when only a Developer ID certificate is on the machine |
+| `CODE_SIGN_IDENTITY` | `Developer ID Application` (manual only) | The certificate used for local builds                         |
 
 **Back this up:** `Local.xcconfig`. That is the whole list for now. If a release pipeline is added later (App Store Connect API key for `xcrun altool` or fastlane), its `.p8` key, key ID, and issuer ID join this list. They would live in `~/.appstoreconnect/` or a gitignored file, never in the repo.
 
@@ -150,11 +152,9 @@ Nothing in this app needs an API key. There is no backend, no analytics, no iClo
 
 Why this is safe: XcodeGen bakes `DEVELOPMENT_TEAM` into `project.pbxproj` at generate time. The project is gitignored, so the baked value never reaches a commit.
 
-Signing steps that need a human in Xcode, once:
+The app group identifier differs per platform, through the `APP_GROUP_IDENTIFIER` build setting in `project.yml`. iOS uses `group.engineering.xo.Today`, which a provisioning profile must back. macOS uses `$(TeamIdentifierPrefix)engineering.xo.Today`, which Developer ID signing honors with no profile at all. Both entitlements files and both Info.plists read the setting, and the app reads the resolved value from its Info.plist at runtime, so the string is never hardcoded in Swift.
 
-1. Open the generated project, Signing & Capabilities, and confirm App Groups lists `group.engineering.xo.Today` for both the iOS and macOS rows. This registers the capability with Apple. `-allowProvisioningUpdates` does not do it headlessly.
-2. If app group writes fail with `EPERM` afterward, delete the stale wildcard profile from `~/Library/Developer/Xcode/UserData/Provisioning Profiles/` and rebuild.
-3. Run `script/generate` again. Picking a team in Xcode writes it into the pbxproj.
+For App Store distribution on macOS the group must become `group.`-prefixed and profile-backed. That is the one-time human step in Xcode's Signing & Capabilities tab, for both the iOS and macOS rows. `-allowProvisioningUpdates` does not register capabilities headlessly. If app group writes fail with `EPERM` afterward, delete the stale wildcard profile from `~/Library/Developer/Xcode/UserData/Provisioning Profiles/` and rebuild. Picking a team in Xcode writes it into the pbxproj, so run `script/generate` again after.
 
 ## 7. Spikes before committing to the design
 
