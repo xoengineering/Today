@@ -3,19 +3,50 @@ import TodayKit
 
 /// What an empty bucket shows, since reaching it is the point.
 struct EmptyBucketView: View {
+  @Environment(RemindersStore.self) private var store
   let bucket: Bucket
 
   var body: some View {
     VStack(spacing: 12) {
-      Image(systemName: bucket == .today ? "sun.max.fill" : "tray.fill")
+      Image(systemName: symbol)
         .font(.system(size: 44))
         .foregroundStyle(.tint)
-      Text(bucket == .today ? "Nothing left for today." : "The backlog is empty.")
+        .symbolEffect(.bounce, value: store.completedTodayCount)
+      Text(headline)
         .font(.title3)
-      Text(bucket == .today ? "Enjoy the rest of it." : "Nothing is waiting on you.")
+      Text(detail)
         .foregroundStyle(.secondary)
     }
     .multilineTextAlignment(.center)
     .padding()
+  }
+
+  private var finishedEverything: Bool {
+    bucket == .today && store.completedTodayCount > 0
+  }
+
+  private var symbol: String {
+    switch bucket {
+    case .today: finishedEverything ? "checkmark.circle.fill" : "sun.max.fill"
+    case .backlog: "tray.fill"
+    }
+  }
+
+  private var headline: String {
+    switch bucket {
+    case .today: finishedEverything ? "All done for today." : "Nothing on the list for today."
+    case .backlog: "The backlog is empty."
+    }
+  }
+
+  private var detail: String {
+    switch bucket {
+    case .today:
+      finishedEverything
+        ? "\(store.completedTodayCount) finished. Enjoy the rest of it."
+        : "Add something, or pull something in from the Backlog."
+    case .backlog:
+      "Nothing is waiting on you."
+    }
   }
 }

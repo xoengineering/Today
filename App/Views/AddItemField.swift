@@ -4,6 +4,7 @@ import TodayKit
 /// The always-present last row, where typing and pressing return creates the item.
 struct AddItemField: View {
   @Environment(RemindersStore.self) private var store
+  @Environment(NavigationState.self) private var navigation
   let bucket: Bucket
   @State private var title = ""
   @FocusState private var isFocused: Bool
@@ -19,6 +20,9 @@ struct AddItemField: View {
         .onSubmit(add)
     }
     .padding(.vertical, 4)
+    .onChange(of: navigation.addItemRequest) {
+      isFocused = true
+    }
   }
 
   private var prompt: String {

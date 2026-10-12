@@ -2,6 +2,7 @@ import EventKit
 import Foundation
 import Observation
 import TodayKit
+import WidgetKit
 import os
 
 /// The single EventKit adapter.
@@ -15,6 +16,10 @@ final class RemindersStore {
   private(set) var authorization: EKAuthorizationStatus
   private(set) var todayItems: [TodayItem] = []
   private(set) var backlogItems: [TodayItem] = []
+  /// How many Today items were finished within the current logical day, for the empty state to celebrate.
+  private(set) var completedTodayCount = 0
+  /// Bumps on every reload, so views that derive from the full history know when to recompute.
+  private(set) var reloadCount = 0
   private(set) var lists: [EKCalendar] = []
   private(set) var todayList: EKCalendar?
   private(set) var backlogList: EKCalendar?
@@ -132,6 +137,11 @@ final class RemindersStore {
     await reload()
   }
 
+  func setEndOfDay(_ endOfDay: EndOfDay) async {
+    settings.endOfDay = endOfDay
+    await reload()
+  }
+
   // MARK: Reading
 
   func reload() async {
@@ -145,6 +155,9 @@ final class RemindersStore {
     todayItems = TodayOrdering.sorted(rolled.filter { $0.bucket == .today && !$0.isCompleted })
     backlogItems = rolled.filter { $0.bucket == .backlog && !$0.isCompleted }
       .sorted { ($0.creationDate ?? .distantPast) < ($1.creationDate ?? .distantPast) }
+    completedTodayCount = DayRing.compute(day: today, items: rolled, endOfDay: settings.endOfDay).completed
+    reloadCount += 1
+    WidgetCenter.shared.reloadAllTimelines()
     logger.info(
       "Reloaded: \(fetched.count) reminders, \(changed.count) rolled over, today=\(self.todayItems.count) backlog=\(self.backlogItems.count)"
     )

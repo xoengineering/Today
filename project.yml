@@ -46,7 +46,11 @@ targets:
   TodayWidgets:
     type: app-extension
     supportedDestinations: [iOS, macOS]
-    sources: [Widgets]
+    # The widget reads Reminders itself, with the same mapping and the same shared settings as the app.
+    sources:
+      - Widgets
+      - App/Models/AppGroup.swift
+      - App/Models/ReminderMapping.swift
     dependencies:
       - package: TodayKit
       - sdk: WidgetKit.framework
